@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "PrP4wwAOpFHIWZ9wzwpU5iaRJW8179vqsFrkG/XCBFk=",
+  "Source": "PantryLink.API",
+  "BasePath": "_content/PantryLink.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

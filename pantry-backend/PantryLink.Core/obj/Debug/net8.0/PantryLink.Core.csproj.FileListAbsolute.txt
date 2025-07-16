@@ -1,0 +1,13 @@
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/bin/Debug/net8.0/PantryLink.Core.deps.json
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/bin/Debug/net8.0/PantryLink.Core.dll
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/bin/Debug/net8.0/PantryLink.Core.pdb
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.csproj.AssemblyReference.cache
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.AssemblyInfoInputs.cache
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.AssemblyInfo.cs
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.csproj.CoreCompileInputs.cache
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.sourcelink.json
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.dll
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/refint/PantryLink.Core.dll
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/PantryLink.Core.pdb
+/home/nath/Documents/School/Projects/PantryLink/pantry-backend/PantryLink.Core/obj/Debug/net8.0/ref/PantryLink.Core.dll
