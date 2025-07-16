@@ -1,1 +1,147 @@
-<p>pantry-detail works!</p>
+<div cds-layout="vertical gap:lg p:lg">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" cds-layout="vertical gap:md align:center p:xl">
+    <cds-progress-circle status="info" size="xl"></cds-progress-circle>
+    <p cds-text="body">Loading pantry details...</p>
+  </div>
+
+  <!-- Pantry Details -->
+  <div *ngIf="!isLoading && pantry" cds-layout="vertical gap:lg">
+    <!-- Pantry Header -->
+    <div cds-layout="horizontal gap:lg wrap:reverse">
+      <div cds-layout="vertical gap:md" style="flex: 2;">
+        <div cds-layout="horizontal gap:sm align:vertical-center">
+          <h1 cds-text="heading">{{ pantry.name }}</h1>
+          <cds-badge [status]="getStatusColor(pantry.status)">
+            {{ getStatusText(pantry.status) }}
+          </cds-badge>
+        </div>
+        
+        <p cds-text="body">{{ pantry.description }}</p>
+        
+        <div cds-layout="vertical gap:sm">
+          <div cds-layout="horizontal gap:sm align:vertical-center">
+            <cds-icon shape="map-marker" size="16"></cds-icon>
+            <span cds-text="body">{{ pantry.address }}</span>
+          </div>
+          
+          <div cds-layout="horizontal gap:sm align:vertical-center">
+            <cds-icon shape="phone-handset" size="16"></cds-icon>
+            <span cds-text="body">{{ pantry.phone }}</span>
+          </div>
+          
+          <div cds-layout="horizontal gap:sm align:vertical-center">
+            <cds-icon shape="email" size="16"></cds-icon>
+            <span cds-text="body">{{ pantry.email }}</span>
+          </div>
+          
+          <div cds-layout="horizontal gap:sm align:vertical-center">
+            <cds-icon shape="world" size="16"></cds-icon>
+            <a [href]="pantry.website" target="_blank" cds-text="link">{{ pantry.website }}</a>
+          </div>
+          
+          <div cds-layout="horizontal gap:sm align:vertical-center">
+            <cds-icon shape="clock" size="16"></cds-icon>
+            <span cds-text="body">{{ pantry.hours }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div cds-layout="vertical gap:md" style="flex: 1;">
+        <img [src]="pantry.imageUrl" alt="{{ pantry.name }}" class="pantry-image">
+        
+        <cds-button action="outline" size="block">
+          <cds-icon shape="map" size="16"></cds-icon>
+          Get Directions
+        </cds-button>
+      </div>
+    </div>
+    
+    <!-- Pantry Services & Requirements -->
+    <div cds-layout="grid cols:12 gap:lg">
+      <div cds-layout="col:6@md col:12@sm">
+        <cds-card>
+          <div cds-layout="vertical gap:md p:lg">
+            <h3 cds-text="section">
+              <cds-icon shape="list" size="20"></cds-icon>
+              Services Offered
+            </h3>
+            <ul cds-text="body">
+              <li *ngFor="let service of pantry.services">{{ service }}</li>
+            </ul>
+          </div>
+        </cds-card>
+      </div>
+      
+      <div cds-layout="col:6@md col:12@sm">
+        <cds-card>
+          <div cds-layout="vertical gap:md p:lg">
+            <h3 cds-text="section">
+              <cds-icon shape="note" size="20"></cds-icon>
+              Requirements
+            </h3>
+            <ul cds-text="body">
+              <li *ngFor="let requirement of pantry.requirements">{{ requirement }}</li>
+            </ul>
+          </div>
+        </cds-card>
+      </div>
+    </div>
+    
+    <!-- Inventory Section -->
+    <div cds-layout="vertical gap:md">
+      <h2 cds-text="section">Current Inventory</h2>
+      
+      <!-- Inventory Filters -->
+      <div cds-layout="horizontal gap:md wrap:wrap">
+        <cds-select>
+          <label>Filter by Category</label>
+          <select [(ngModel)]="selectedCategory">
+            <option value="all">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </cds-select>
+        
+        <cds-input style="flex-grow: 1;">
+          <label>Search Items</label>
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search by name or category">
+        </cds-input>
+      </div>
+      
+      <!-- Inventory Table -->
+      <cds-card>
+        <table cds-table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Expiration Date</th>
+              <th>Dietary Info</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of getFilteredItems()" [ngClass]="getExpirationClass(item.expirationDate)">
+              <td>{{ item.name }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.expirationDate | date:'MM/dd/yyyy' }}</td>
+              <td>
+                <div cds-layout="horizontal gap:xs wrap:true">
+                  <cds-tag *ngFor="let flag of item.dietaryFlags" size="sm">{{ flag }}</cds-tag>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </cds-card>
+      
+      <!-- No Results -->
+      <cds-alert *ngIf="getFilteredItems().length === 0" status="info">
+        <cds-alert-content>
+          No items found matching your criteria. Try adjusting your filters.
+        </cds-alert-content>
+      </cds-alert>
+    </div>
+  </div>
+</div>

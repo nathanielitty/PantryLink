@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PantryLink.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bccdd928d8917aec6a8ab16089961ff352aa671a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b8e6e15fb4dc2b89cb04a00d4a888152f14a322")]
 [assembly: System.Reflection.AssemblyProductAttribute("PantryLink.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PantryLink.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

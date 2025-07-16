@@ -1,1 +1,240 @@
-<p>barcode-scanner works!</p>
+<div cds-layout="vertical gap:lg p:lg">
+  <!-- Header -->
+  <div cds-layout="horizontal gap:md align:vertical-center">
+    <h1 cds-text="heading">{{ pantryName }} Barcode Scanner</h1>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" cds-layout="vertical gap:md align:center p:xl">
+    <cds-progress-circle status="info" size="xl"></cds-progress-circle>
+    <p cds-text="body">Loading scanner...</p>
+  </div>
+  
+  <!-- Scanner Content -->
+  <div *ngIf="!isLoading" cds-layout="vertical gap:lg">
+    <!-- Scanner View -->
+    <cds-card *ngIf="scannerEnabled && !showItemForm" class="scanner-card">
+      <div cds-layout="vertical gap:md p:lg">
+        <h2 cds-text="section">
+          <cds-icon shape="camera" size="24"></cds-icon>
+          Scan Barcode
+        </h2>
+        
+        <!-- Scanner Component -->
+        <div class="scanner-container">
+          <zxing-scanner
+            *ngIf="scannerEnabled"
+            [enable]="scannerEnabled"
+            [tryHarder]="true"
+            (scanSuccess)="onScanSuccess($event)"
+            (scanError)="onScanError($event)"
+            (scanFailure)="onScanFailure($event)"
+            (camerasFound)="onCamerasFound($event)"
+            (permissionResponse)="onPermissionResponse($event)"
+          ></zxing-scanner>
+          
+          <!-- Scanner Overlay -->
+          <div class="scanner-overlay">
+            <div class="scanner-target"></div>
+          </div>
+        </div>
+        
+        <!-- Scanner Status -->
+        <div cds-layout="vertical gap:sm align:center">
+          <p cds-text="body center">Position the barcode within the frame to scan</p>
+          
+          <!-- Error Messages -->
+          <cds-alert *ngIf="!scannerAvailable" status="danger" closable="false">
+            <cds-alert-content>
+              No camera found. Please connect a camera to use the barcode scanner.
+            </cds-alert-content>
+          </cds-alert>
+          
+          <cds-alert *ngIf="!hasPermission && scannerAvailable" status="warning" closable="false">
+            <cds-alert-content>
+              Camera permission denied. Please allow camera access to use the barcode scanner.
+            </cds-alert-content>
+          </cds-alert>
+        </div>
+      </div>
+    </cds-card>
+    
+    <!-- Item Form -->
+    <cds-card *ngIf="showItemForm" class="form-card">
+      <div cds-layout="vertical gap:md p:lg">
+        <h2 cds-text="section">
+          <cds-icon shape="success-standard" size="24"></cds-icon>
+          Barcode Scanned: {{ qrResultString }}
+        </h2>
+        
+        <form [formGroup]="itemForm" cds-layout="vertical gap:lg">
+          <cds-form-group>
+            <cds-input>
+              <label>Item Name</label>
+              <input 
+                type="text" 
+                formControlName="name"
+                placeholder="Enter item name"
+                [attr.aria-invalid]="itemForm.get('name')?.invalid && itemForm.get('name')?.touched"
+              />
+              <cds-control-message 
+                *ngIf="itemForm.get('name')?.invalid && itemForm.get('name')?.touched"
+                status="error"
+              >
+                Item name is required
+              </cds-control-message>
+            </cds-input>
+          </cds-form-group>
+          
+          <div cds-layout="grid cols:12 gap:md">
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-select>
+                  <label>Category</label>
+                  <select formControlName="category">
+                    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                  </select>
+                </cds-select>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>Quantity</label>
+                  <input 
+                    type="number" 
+                    formControlName="quantity"
+                    min="1"
+                    [attr.aria-invalid]="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched"
+                    status="error"
+                  >
+                    Quantity must be at least 1
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+          </div>
+          
+          <cds-form-group>
+            <cds-date>
+              <label>Expiration Date</label>
+              <input 
+                type="date" 
+                formControlName="expirationDate"
+                [attr.aria-invalid]="itemForm.get('expirationDate')?.invalid && itemForm.get('expirationDate')?.touched"
+              />
+              <cds-control-message 
+                *ngIf="itemForm.get('expirationDate')?.invalid && itemForm.get('expirationDate')?.touched"
+                status="error"
+              >
+                Expiration date is required
+              </cds-control-message>
+            </cds-date>
+          </cds-form-group>
+          
+          <div cds-layout="horizontal gap:md">
+            <cds-button action="outline" (click)="resetScanner()">
+              <cds-icon shape="camera" size="16"></cds-icon>
+              Scan Again
+            </cds-button>
+            <cds-button action="solid" status="primary" (click)="saveItem()" [disabled]="itemForm.invalid || isSaving">
+              <cds-icon *ngIf="isSaving" shape="spinner" size="16"></cds-icon>
+              <cds-icon *ngIf="!isSaving" shape="check" size="16"></cds-icon>
+              {{ isSaving ? 'Saving...' : 'Save Item' }}
+            </cds-button>
+          </div>
+        </form>
+      </div>
+    </cds-card>
+    
+    <!-- Scan History -->
+    <cds-card>
+      <div cds-layout="vertical gap:md p:lg">
+        <div cds-layout="horizontal gap:md align:vertical-center">
+          <h2 cds-text="section">
+            <cds-icon shape="history" size="24"></cds-icon>
+            Scan History
+          </h2>
+          
+          <div cds-layout="align:right" style="margin-left: auto;">
+            <cds-button action="outline" status="danger" (click)="clearHistory()" [disabled]="scannedItems.length === 0">
+              <cds-icon shape="trash" size="16"></cds-icon>
+              Clear History
+            </cds-button>
+          </div>
+        </div>
+        
+        <!-- History Table -->
+        <table cds-table *ngIf="scannedItems.length > 0">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Barcode</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Expiration</th>
+              <th>Scanned</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of scannedItems">
+              <td>{{ item.name }}</td>
+              <td>{{ item.barcode }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ formatDate(item.expirationDate) }}</td>
+              <td>{{ formatDate(item.timestamp) }} {{ formatTime(item.timestamp) }}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <!-- Empty History State -->
+        <div *ngIf="scannedItems.length === 0" cds-layout="vertical gap:md align:center p:lg">
+          <cds-icon shape="info-circle" size="48" class="empty-icon"></cds-icon>
+          <h3 cds-text="section">No scan history</h3>
+          <p cds-text="body">Items you scan will appear here.</p>
+        </div>
+      </div>
+    </cds-card>
+    
+    <!-- Help Section -->
+    <cds-card class="help-card">
+      <div cds-layout="vertical gap:md p:lg">
+        <h2 cds-text="section">
+          <cds-icon shape="help" size="24"></cds-icon>
+          How to Use the Scanner
+        </h2>
+        
+        <div cds-layout="grid cols:12 gap:lg">
+          <div cds-layout="col:4@md col:12@sm">
+            <div cds-layout="vertical gap:sm align:center text:center">
+              <cds-icon shape="camera" size="48" class="help-icon"></cds-icon>
+              <h3 cds-text="subsection">1. Scan Barcode</h3>
+              <p cds-text="body">Position the barcode within the scanner frame until it's detected.</p>
+            </div>
+          </div>
+          
+          <div cds-layout="col:4@md col:12@sm">
+            <div cds-layout="vertical gap:sm align:center text:center">
+              <cds-icon shape="form" size="48" class="help-icon"></cds-icon>
+              <h3 cds-text="subsection">2. Enter Details</h3>
+              <p cds-text="body">Fill in the item details including name, category, and expiration date.</p>
+            </div>
+          </div>
+          
+          <div cds-layout="col:4@md col:12@sm">
+            <div cds-layout="vertical gap:sm align:center text:center">
+              <cds-icon shape="check-circle" size="48" class="help-icon"></cds-icon>
+              <h3 cds-text="subsection">3. Save Item</h3>
+              <p cds-text="body">Save the item to add it to the pantry inventory.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </cds-card>
+  </div>
+</div>

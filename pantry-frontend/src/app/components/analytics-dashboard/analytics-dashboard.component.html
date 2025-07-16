@@ -1,0 +1,246 @@
+<div cds-layout="vertical gap:lg p:lg" class="analytics-container">
+  <!-- Header -->
+  <div cds-layout="vertical gap:sm align:center text:center">
+    <h1 cds-text="heading">PantryLink Analytics Dashboard</h1>
+    <p cds-text="body">System performance and insights</p>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" cds-layout="vertical gap:md align:center p:xl">
+    <cds-progress-circle status="info" size="xl"></cds-progress-circle>
+    <p cds-text="body">Loading analytics data...</p>
+  </div>
+  
+  <!-- Error State -->
+  <cds-alert *ngIf="error" status="danger" closable="true">
+    <cds-alert-content>
+      <div cds-layout="vertical gap:md">
+        <h3 cds-text="subsection">Unable to load analytics</h3>
+        <p>{{ error }}</p>
+        <cds-button action="outline" (click)="loadDashboard()">
+          <cds-icon shape="refresh" size="16"></cds-icon>
+          Retry
+        </cds-button>
+      </div>
+    </cds-alert-content>
+  </cds-alert>
+  
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading && dashboardData" cds-layout="vertical gap:lg">
+    <!-- System Overview Cards -->
+    <div cds-layout="grid cols:12 gap:lg">
+      <div cds-layout="col:4@lg col:6@md col:12@sm">
+        <cds-card class="stat-card primary">
+          <div cds-layout="horizontal gap:md p:lg align:center">
+            <cds-icon shape="store" size="xl" class="stat-icon"></cds-icon>
+            <div cds-layout="vertical">
+              <h3 cds-text="heading">{{ dashboardData.systemStats.totalActivePantries }}</h3>
+              <p cds-text="body secondary">Active Pantries</p>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <div cds-layout="col:4@lg col:6@md col:12@sm">
+        <cds-card class="stat-card success">
+          <div cds-layout="horizontal gap:md p:lg align:center">
+            <cds-icon shape="user" size="xl" class="stat-icon"></cds-icon>
+            <div cds-layout="vertical">
+              <h3 cds-text="heading">{{ dashboardData.systemStats.totalUsers }}</h3>
+              <p cds-text="body secondary">Registered Users</p>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <div cds-layout="col:4@lg col:6@md col:12@sm">
+        <cds-card class="stat-card info">
+          <div cds-layout="horizontal gap:md p:lg align:center">
+            <cds-icon shape="shopping-bag" size="xl" class="stat-icon"></cds-icon>
+            <div cds-layout="vertical">
+              <h3 cds-text="heading">{{ dashboardData.systemStats.totalInventoryItems }}</h3>
+              <p cds-text="body secondary">Total Items</p>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <div cds-layout="col:4@lg col:6@md col:12@sm">
+        <cds-card class="stat-card warning">
+          <div cds-layout="horizontal gap:md p:lg align:center">
+            <cds-icon shape="search" size="xl" class="stat-icon"></cds-icon>
+            <div cds-layout="vertical">
+              <h3 cds-text="heading">{{ dashboardData.systemStats.totalSearches }}</h3>
+              <p cds-text="body secondary">Total Searches</p>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <div cds-layout="col:4@lg col:6@md col:12@sm">
+        <cds-card class="stat-card secondary">
+          <div cds-layout="horizontal gap:md p:lg align:center">
+            <cds-icon shape="star" size="xl" class="stat-icon"></cds-icon>
+            <div cds-layout="vertical">
+              <h3 cds-text="heading">{{ dashboardData.systemStats.averageSystemRating | number:'1.1-1' }}</h3>
+              <p cds-text="body secondary">Avg Rating</p>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <div cds-layout="col:4@lg col:6@md col:12@sm">
+        <cds-card class="stat-card danger">
+          <div cds-layout="horizontal gap:md p:lg align:center">
+            <cds-icon shape="analytics" size="xl" class="stat-icon"></cds-icon>
+            <div cds-layout="vertical">
+              <h3 cds-text="heading">{{ dashboardData.systemStats.totalItemsDistributed }}</h3>
+              <p cds-text="body secondary">Items Distributed</p>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+    </div>
+    
+    <!-- Charts Section -->
+    <div cds-layout="grid cols:12 gap:lg">
+      <!-- Top Performing Pantries -->
+      <div cds-layout="col:6@lg col:12@md">
+        <cds-card>
+          <div cds-layout="vertical gap:md p:lg">
+            <h2 cds-text="section">
+              <cds-icon shape="star" size="24"></cds-icon>
+              Top Performing Pantries
+            </h2>
+            
+            <div cds-layout="vertical gap:md">
+              <div *ngFor="let pantry of dashboardData.topPerformingPantries" class="pantry-item">
+                <div cds-layout="horizontal gap:md align:vertical-center">
+                  <div cds-layout="vertical" style="flex: 1;">
+                    <h4 cds-text="subsection">{{ pantry.pantryName }}</h4>
+                    <div cds-layout="horizontal gap:md">
+                      <p cds-text="body secondary">Rating: {{ pantry.averageRating | number:'1.1-1' }}/5.0</p>
+                      <p cds-text="body secondary">Visitors: {{ pantry.visitorCount }}</p>
+                      <p cds-text="body secondary">Items: {{ pantry.totalItemsCount }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="rating-stars">
+                    <cds-icon *ngFor="let i of [1,2,3,4,5]" 
+                      [shape]="i <= pantry.averageRating ? 'star solid' : 'star'" 
+                      size="16"
+                      [class.filled]="i <= pantry.averageRating"
+                    ></cds-icon>
+                  </div>
+                </div>
+                
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(pantry.averageRating / 5) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <!-- Popular Categories Chart -->
+      <div cds-layout="col:6@lg col:12@md">
+        <cds-card>
+          <div cds-layout="vertical gap:md p:lg">
+            <h2 cds-text="section">
+              <cds-icon shape="list" size="24"></cds-icon>
+              Popular Food Categories
+            </h2>
+            
+            <div cds-layout="vertical gap:md">
+              <div *ngFor="let category of popularCategoriesArray" class="category-item">
+                <div cds-layout="horizontal gap:md align:vertical-center justify:between">
+                  <span cds-text="body">{{ category.name }}</span>
+                  <span cds-text="body secondary">{{ category.count }} items</span>
+                </div>
+                
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress-fill category-fill" [style.width.%]="(category.count / maxCategoryCount) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <!-- ZIP Code Search Analytics -->
+      <div cds-layout="col:6@lg col:12@md">
+        <cds-card>
+          <div cds-layout="vertical gap:md p:lg">
+            <h2 cds-text="section">
+              <cds-icon shape="map-marker" size="24"></cds-icon>
+              Searches by ZIP Code
+            </h2>
+            
+            <div cds-layout="vertical gap:md">
+              <div *ngFor="let zip of searchesByZipArray" class="zip-item">
+                <div cds-layout="horizontal gap:md align:vertical-center justify:between">
+                  <span cds-text="body">{{ zip.zipCode }}</span>
+                  <span cds-text="body secondary">{{ zip.searches }} searches</span>
+                </div>
+                
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress-fill zip-fill" [style.width.%]="(zip.searches / maxZipSearches) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+      
+      <!-- Recent Activity -->
+      <div cds-layout="col:6@lg col:12@md">
+        <cds-card>
+          <div cds-layout="vertical gap:md p:lg">
+            <h2 cds-text="section">
+              <cds-icon shape="history" size="24"></cds-icon>
+              Recent Pantry Activity
+            </h2>
+            
+            <div cds-layout="vertical gap:md">
+              <div *ngFor="let activity of dashboardData.recentActivity" class="activity-item">
+                <div cds-layout="horizontal gap:md align:vertical-center">
+                  <cds-icon shape="analytics" size="24" class="activity-icon"></cds-icon>
+                  
+                  <div cds-layout="vertical" style="flex: 1;">
+                    <h4 cds-text="subsection">{{ activity.pantryName }}</h4>
+                    <div cds-layout="horizontal gap:md">
+                      <p cds-text="body secondary">{{ activity.inventoryUpdatesCount }} updates</p>
+                      <p cds-text="body secondary">{{ activity.visitorCount }} visitors</p>
+                      <p cds-text="body secondary">{{ activity.date | date:'shortDate' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </cds-card>
+      </div>
+    </div>
+    
+    <!-- Controls Section -->
+    <div cds-layout="horizontal gap:md align:center justify:center">
+      <cds-button action="solid" status="success" (click)="refreshData()" [disabled]="isLoading">
+        <cds-icon *ngIf="isLoading" shape="spinner" size="16"></cds-icon>
+        <cds-icon *ngIf="!isLoading" shape="refresh" size="16"></cds-icon>
+        {{ isLoading ? 'Updating...' : 'Refresh Data' }}
+      </cds-button>
+      
+      <cds-button action="outline" (click)="updateSystemAnalytics()" [disabled]="isLoading">
+        <cds-icon shape="analytics" size="16"></cds-icon>
+        Update System Analytics
+      </cds-button>
+    </div>
+  </div>
+</div>

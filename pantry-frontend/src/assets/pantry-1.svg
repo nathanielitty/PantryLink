@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="200px" viewBox="0 0 400 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Community Food Bank</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#3A86FF" offset="0%"></stop>
+            <stop stop-color="#0A58CA" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#F8F9FA" x="0" y="0" width="400" height="200" rx="8"></rect>
+        
+        <!-- Building -->
+        <g transform="translate(20, 20)">
+            <rect fill="#FFFFFF" x="0" y="30" width="150" height="120" rx="4"></rect>
+            <polygon fill="url(#linearGradient-1)" points="75 0 150 30 0 30"></polygon>
+            <rect fill="url(#linearGradient-1)" x="0" y="30" width="150" height="10"></rect>
+            
+            <!-- Windows -->
+            <rect fill="#E1F0FF" x="20" y="50" width="30" height="30" rx="2"></rect>
+            <rect fill="#E1F0FF" x="100" y="50" width="30" height="30" rx="2"></rect>
+            <rect fill="#E1F0FF" x="20" y="100" width="30" height="30" rx="2"></rect>
+            <rect fill="#E1F0FF" x="100" y="100" width="30" height="30" rx="2"></rect>
+            
+            <!-- Door -->
+            <rect fill="#0A58CA" x="60" y="110" width="30" height="40" rx="2"></rect>
+            <circle fill="#FFD700" cx="65" cy="130" r="2"></circle>
+        </g>
+        
+        <!-- Info -->
+        <g transform="translate(190, 30)">
+            <text font-family="Arial" font-size="18" font-weight="bold" fill="#212529">
+                <tspan x="0" y="20">Community Food Bank</tspan>
+            </text>
+            
+            <g transform="translate(0, 40)">
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="0">123 Main Street, Anytown</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="25">Open: Mon-Fri 9AM-5PM</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="50">Phone: (555) 123-4567</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="75">Items Available: 120+</tspan>
+                </text>
+            </g>
+        </g>
+        
+        <!-- Status Badge -->
+        <g transform="translate(320, 30)">
+            <rect fill="#28A745" x="0" y="0" width="60" height="24" rx="12"></rect>
+            <text font-family="Arial" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+                <tspan x="30" y="16">OPEN</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

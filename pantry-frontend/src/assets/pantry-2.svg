@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="200px" viewBox="0 0 400 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Hope Kitchen</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FF006E" offset="0%"></stop>
+            <stop stop-color="#C9184A" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#F8F9FA" x="0" y="0" width="400" height="200" rx="8"></rect>
+        
+        <!-- Building -->
+        <g transform="translate(20, 20)">
+            <rect fill="#FFFFFF" x="0" y="20" width="150" height="130" rx="4"></rect>
+            <rect fill="url(#linearGradient-1)" x="0" y="0" width="150" height="20" rx="4"></rect>
+            
+            <!-- Windows -->
+            <rect fill="#FFE5EE" x="20" y="50" width="30" height="30" rx="2"></rect>
+            <rect fill="#FFE5EE" x="100" y="50" width="30" height="30" rx="2"></rect>
+            <rect fill="#FFE5EE" x="20" y="100" width="30" height="30" rx="2"></rect>
+            <rect fill="#FFE5EE" x="100" y="100" width="30" height="30" rx="2"></rect>
+            
+            <!-- Door -->
+            <rect fill="#C9184A" x="60" y="100" width="30" height="50" rx="2"></rect>
+            <circle fill="#FFD700" cx="65" cy="125" r="2"></circle>
+            
+            <!-- Sign -->
+            <rect fill="#FFFFFF" x="30" y="5" width="90" height="10" rx="2"></rect>
+            <text font-family="Arial" font-size="8" font-weight="bold" fill="#C9184A" text-anchor="middle">
+                <tspan x="75" y="13">HOPE KITCHEN</tspan>
+            </text>
+        </g>
+        
+        <!-- Info -->
+        <g transform="translate(190, 30)">
+            <text font-family="Arial" font-size="18" font-weight="bold" fill="#212529">
+                <tspan x="0" y="20">Hope Kitchen</tspan>
+            </text>
+            
+            <g transform="translate(0, 40)">
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="0">456 Oak Avenue, Anytown</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="25">Open: Tue, Thu 10AM-3PM</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="50">Phone: (555) 987-6543</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="75">Items Available: 85+</tspan>
+                </text>
+            </g>
+        </g>
+        
+        <!-- Status Badge -->
+        <g transform="translate(320, 30)">
+            <rect fill="#FFC107" x="0" y="0" width="60" height="24" rx="12"></rect>
+            <text font-family="Arial" font-size="12" font-weight="bold" fill="#212529" text-anchor="middle">
+                <tspan x="30" y="16">LIMITED</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

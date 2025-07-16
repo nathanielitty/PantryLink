@@ -1,0 +1,49 @@
+.pantry-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+// Table styling
+table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    background-color: var(--cds-global-color-gray-100);
+  }
+  
+  tr.expired {
+    background-color: rgba(var(--cds-global-color-red-500-rgb), 0.1);
+  }
+  
+  tr.expiring-soon {
+    background-color: rgba(var(--cds-global-color-orange-500-rgb), 0.1);
+  }
+  
+  tr.expiring-month {
+    background-color: rgba(var(--cds-global-color-yellow-500-rgb), 0.05);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  [cds-layout="horizontal gap:lg wrap:reverse"] {
+    flex-direction: column;
+    
+    > div {
+      width: 100%;
+    }
+  }
+  
+  .pantry-image {
+    height: 200px;
+  }
+  
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}

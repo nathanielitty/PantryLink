@@ -1,1 +1,169 @@
-<p>pantry-search works!</p>
+<div class="search-container">
+  <!-- Search Header -->
+  <div class="search-header">
+    <h1 class="animate-slide-up">Find Food Pantries</h1>
+    <p class="animate-slide-up delay-200">Discover food assistance in your area with real-time availability</p>
+  </div>
+
+  <!-- Search Form -->
+  <div class="search-form-card animate-slide-up delay-300">
+    <div class="search-form-content">
+      <h2>Search Parameters</h2>
+      
+      <div class="search-form-inputs">
+        <div class="form-group">
+          <label for="zipCode">ZIP Code</label>
+          <div class="input-with-icon">
+            <i class="fas fa-map-marker-alt"></i>
+            <input 
+              type="text" 
+              id="zipCode"
+              class="form-control" 
+              [(ngModel)]="zipCode" 
+              placeholder="Enter ZIP code"
+              maxlength="5"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="searchRadius">Search Radius</label>
+          <div class="input-with-icon">
+            <i class="fas fa-circle-notch"></i>
+            <select 
+              id="searchRadius"
+              class="form-control" 
+              [(ngModel)]="searchRadius"
+            >
+              <option value="5">5 miles</option>
+              <option value="10">10 miles</option>
+              <option value="15">15 miles</option>
+              <option value="25">25 miles</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="search-button-container">
+          <button 
+            class="btn btn-primary search-btn" 
+            (click)="searchPantries()"
+            [disabled]="zipCode.length !== 5 || isLoading"
+          >
+            <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+            <i *ngIf="!isLoading" class="fas fa-search"></i>
+            {{ isLoading ? 'Searching...' : 'Search Pantries' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container animate-fade-in">
+    <div class="spinner"></div>
+    <span>Finding pantries near you...</span>
+  </div>
+
+  <!-- Results -->
+  <div *ngIf="hasSearched && !isLoading" class="search-results">
+    <!-- Results Header -->
+    <div class="results-header animate-slide-up">
+      <h2>
+        {{ pantries.length }} pantries found within {{ searchRadius }} miles of {{ zipCode }}
+      </h2>
+      <div class="zip-badge">
+        <i class="fas fa-map-marker-alt"></i>
+        ZIP: {{ zipCode }}
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="pantries.length === 0" class="alert alert-info animate-fade-in">
+      <i class="fas fa-info-circle"></i>
+      <div>
+        <strong>No pantries found</strong>
+        <p>Try expanding your search radius or check a different ZIP code.</p>
+      </div>
+    </div>
+
+    <!-- Pantry Cards -->
+    <div class="pantry-grid">
+      <div *ngFor="let pantry of pantries; let i = index" class="pantry-card animate-slide-up" [ngClass]="'delay-' + (i * 100)">
+        <div class="pantry-card-inner">
+          <!-- Pantry Image -->
+          <div class="pantry-image-container">
+            <img [src]="pantry.imageUrl || 'assets/default-pantry.jpg'" [alt]="pantry.name" class="pantry-image">
+            <div class="pantry-status" [ngClass]="getStatusColor(pantry.status)">
+              {{ getStatusText(pantry.status) }}
+            </div>
+            <div class="pantry-distance">
+              <i class="fas fa-map-marker-alt"></i> {{ pantry.distance }} miles
+            </div>
+          </div>
+          
+          <!-- Pantry Info -->
+          <div class="pantry-info">
+            <h3>{{ pantry.name }}</h3>
+            
+            <div class="pantry-details">
+              <p class="pantry-address">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ pantry.address }}
+              </p>
+              <p class="pantry-phone">
+                <i class="fas fa-phone"></i>
+                {{ pantry.phone }}
+              </p>
+              <p class="pantry-hours">
+                <i class="fas fa-clock"></i>
+                {{ pantry.hours }}
+              </p>
+            </div>
+
+            <div class="pantry-inventory">
+              <div class="inventory-badge">
+                <i class="fas fa-shopping-basket"></i>
+                {{ pantry.availableItems }} items available
+              </div>
+              <div class="updated-badge">
+                <i class="fas fa-sync-alt"></i>
+                Updated {{ pantry.lastUpdated | date:'shortDate' }}
+              </div>
+            </div>
+            
+            <!-- Tags -->
+            <div class="pantry-tags" *ngIf="pantry.tags && pantry.tags.length > 0">
+              <span class="tag" *ngFor="let tag of pantry.tags">{{ tag }}</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pantry-actions">
+              <a [routerLink]="['/pantry', pantry.id]" class="btn btn-primary">
+                <i class="fas fa-eye"></i> View Details
+              </a>
+              <a [routerLink]="['/inventory', pantry.id]" class="btn btn-outline">
+                <i class="fas fa-list"></i> View Inventory
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Tips -->
+  <div *ngIf="!hasSearched" class="tips-card animate-slide-up delay-400">
+    <div class="tips-content">
+      <h3>
+        <i class="fas fa-lightbulb"></i>
+        Search Tips
+      </h3>
+      <ul>
+        <li>Enter your 5-digit ZIP code for accurate results</li>
+        <li>Adjust the search radius to find more options</li>
+        <li>Check pantry status and hours before visiting</li>
+        <li>View real-time inventory to see what's available</li>
+      </ul>
+    </div>
+  </div>
+</div>

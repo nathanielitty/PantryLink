@@ -1,0 +1,89 @@
+/* Inventory Management Component Styles */
+
+// Table styling
+table {
+  width: 100%;
+  
+  th.sortable-header {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    &:hover {
+      background-color: var(--cds-global-color-gray-200);
+    }
+  }
+  
+  tr.expired {
+    background-color: rgba(var(--cds-global-color-red-500-rgb), 0.1);
+  }
+  
+  tr.expiring-soon {
+    background-color: rgba(var(--cds-global-color-orange-500-rgb), 0.1);
+  }
+  
+  tr.expiring-month {
+    background-color: rgba(var(--cds-global-color-yellow-500-rgb), 0.05);
+  }
+}
+
+// Modal styling
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+// Empty state styling
+.empty-icon {
+  color: var(--cds-global-color-gray-500);
+}
+
+// Animation for loading spinner
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+cds-icon[shape="spinner"] {
+  animation: spin 1s linear infinite;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  [cds-layout="horizontal gap:md wrap:wrap align:vertical-center"] {
+    cds-input, cds-select {
+      width: 100%;
+    }
+    
+    [cds-layout="align:right"] {
+      width: 100%;
+      margin-top: 1rem;
+      
+      cds-button {
+        width: 100%;
+      }
+    }
+  }
+  
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}

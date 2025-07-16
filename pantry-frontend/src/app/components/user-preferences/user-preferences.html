@@ -1,1 +1,286 @@
-<p>user-preferences works!</p>
+<div cds-layout="vertical gap:lg p:lg">
+  <h1 cds-text="heading">User Preferences</h1>
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" cds-layout="vertical gap:md align:center p:xl">
+    <cds-progress-circle status="info" size="xl"></cds-progress-circle>
+    <p cds-text="body">Loading your preferences...</p>
+  </div>
+  
+  <!-- Preferences Form -->
+  <div *ngIf="!isLoading" cds-layout="vertical gap:xl">
+    <!-- Success Message -->
+    <cds-alert *ngIf="saveSuccess" status="success" closable="true">
+      <cds-alert-content>
+        Your preferences have been saved successfully!
+      </cds-alert-content>
+    </cds-alert>
+    
+    <!-- Error Message -->
+    <cds-alert *ngIf="saveError" status="danger" closable="true">
+      <cds-alert-content>
+        {{ saveError }}
+      </cds-alert-content>
+    </cds-alert>
+    
+    <form [formGroup]="profileForm" (ngSubmit)="savePreferences()">
+      <!-- Personal Information -->
+      <cds-card>
+        <div cds-layout="vertical gap:md p:lg">
+          <h2 cds-text="section">
+            <cds-icon shape="user" size="24"></cds-icon>
+            Personal Information
+          </h2>
+          
+          <div cds-layout="grid cols:12 gap:md">
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>First Name</label>
+                  <input 
+                    type="text" 
+                    formControlName="firstName"
+                    [attr.aria-invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
+                    status="error"
+                  >
+                    First name is required
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>Last Name</label>
+                  <input 
+                    type="text" 
+                    formControlName="lastName"
+                    [attr.aria-invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+                    status="error"
+                  >
+                    Last name is required
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>Email Address</label>
+                  <input 
+                    type="email" 
+                    formControlName="email"
+                    [attr.aria-invalid]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                    status="error"
+                  >
+                    Please enter a valid email address
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>Phone Number</label>
+                  <input 
+                    type="tel" 
+                    formControlName="phone"
+                    placeholder="10-digit number, no dashes"
+                    [attr.aria-invalid]="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched"
+                    status="error"
+                  >
+                    Please enter a valid 10-digit phone number
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+          </div>
+        </div>
+      </cds-card>
+      
+      <!-- Location Preferences -->
+      <cds-card>
+        <div cds-layout="vertical gap:md p:lg">
+          <h2 cds-text="section">
+            <cds-icon shape="map-marker" size="24"></cds-icon>
+            Location Preferences
+          </h2>
+          
+          <div cds-layout="grid cols:12 gap:md">
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>ZIP Code</label>
+                  <input 
+                    type="text" 
+                    formControlName="zipCode"
+                    maxlength="5"
+                    [attr.aria-invalid]="profileForm.get('zipCode')?.invalid && profileForm.get('zipCode')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="profileForm.get('zipCode')?.invalid && profileForm.get('zipCode')?.touched"
+                    status="error"
+                  >
+                    Please enter a valid 5-digit ZIP code
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-select>
+                  <label>Default Search Radius</label>
+                  <select formControlName="searchRadius">
+                    <option *ngFor="let option of radiusOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </cds-select>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-input>
+                  <label>Family Size</label>
+                  <input 
+                    type="number" 
+                    formControlName="familySize"
+                    min="1"
+                    max="20"
+                    [attr.aria-invalid]="profileForm.get('familySize')?.invalid && profileForm.get('familySize')?.touched"
+                  />
+                  <cds-control-message 
+                    *ngIf="profileForm.get('familySize')?.invalid && profileForm.get('familySize')?.touched"
+                    status="error"
+                  >
+                    Please enter a valid family size (1-20)
+                  </cds-control-message>
+                </cds-input>
+              </cds-form-group>
+            </div>
+            
+            <div cds-layout="col:6@md col:12@sm">
+              <cds-form-group>
+                <cds-select>
+                  <label>Transportation Method</label>
+                  <select formControlName="transportationMethod">
+                    <option value="car">Car</option>
+                    <option value="public">Public Transportation</option>
+                    <option value="walking">Walking</option>
+                    <option value="bicycle">Bicycle</option>
+                    <option value="rideshare">Rideshare</option>
+                  </select>
+                </cds-select>
+              </cds-form-group>
+            </div>
+          </div>
+        </div>
+      </cds-card>
+      
+      <!-- Dietary Preferences -->
+      <cds-card>
+        <div cds-layout="vertical gap:md p:lg">
+          <h2 cds-text="section">
+            <cds-icon shape="filter" size="24"></cds-icon>
+            Dietary Preferences
+          </h2>
+          
+          <p cds-text="body">Select any dietary preferences to help us recommend appropriate food pantries and items.</p>
+          
+          <div cds-layout="grid cols:12 gap:md">
+            <div cds-layout="col:4@lg col:6@md col:12@sm" *ngFor="let preference of dietaryPreferences">
+              <cds-checkbox>
+                <label>{{ preference.name }}</label>
+                <input 
+                  type="checkbox" 
+                  [checked]="preference.enabled"
+                  (change)="togglePreference(preference)"
+                />
+              </cds-checkbox>
+            </div>
+          </div>
+        </div>
+      </cds-card>
+      
+      <!-- Allergies -->
+      <cds-card>
+        <div cds-layout="vertical gap:md p:lg">
+          <h2 cds-text="section">
+            <cds-icon shape="warning-standard" size="24"></cds-icon>
+            Allergies
+          </h2>
+          
+          <p cds-text="body">Select any allergies to help us filter out inappropriate food items.</p>
+          
+          <div cds-layout="grid cols:12 gap:md">
+            <div cds-layout="col:4@lg col:6@md col:12@sm" *ngFor="let allergy of allergiesPreferences">
+              <cds-checkbox>
+                <label>{{ allergy.name }}</label>
+                <input 
+                  type="checkbox" 
+                  [checked]="allergy.enabled"
+                  (change)="togglePreference(allergy)"
+                />
+              </cds-checkbox>
+            </div>
+          </div>
+        </div>
+      </cds-card>
+      
+      <!-- Notification Preferences -->
+      <cds-card>
+        <div cds-layout="vertical gap:md p:lg">
+          <h2 cds-text="section">
+            <cds-icon shape="bell" size="24"></cds-icon>
+            Notification Preferences
+          </h2>
+          
+          <p cds-text="body">Choose how and when you'd like to receive notifications.</p>
+          
+          <div cds-layout="grid cols:12 gap:md">
+            <div cds-layout="col:6@md col:12@sm" *ngFor="let notification of notificationPreferences">
+              <cds-checkbox>
+                <label>{{ notification.name }}</label>
+                <input 
+                  type="checkbox" 
+                  [checked]="notification.enabled"
+                  (change)="togglePreference(notification)"
+                />
+              </cds-checkbox>
+            </div>
+          </div>
+        </div>
+      </cds-card>
+      
+      <!-- Save Button -->
+      <div cds-layout="horizontal gap:md align:right m-t:lg">
+        <cds-button action="outline" type="button" routerLink="/">
+          <cds-icon shape="times" size="16"></cds-icon>
+          Cancel
+        </cds-button>
+        <cds-button action="solid" status="primary" type="submit" [disabled]="profileForm.invalid || isSaving">
+          <cds-icon *ngIf="isSaving" shape="spinner" size="16"></cds-icon>
+          <cds-icon *ngIf="!isSaving" shape="check" size="16"></cds-icon>
+          {{ isSaving ? 'Saving...' : 'Save Preferences' }}
+        </cds-button>
+      </div>
+    </form>
+  </div>
+</div>

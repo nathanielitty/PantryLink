@@ -1,1 +1,389 @@
-<p>inventory-management works!</p>
+<div cds-layout="vertical gap:lg p:lg">
+  <!-- Header -->
+  <div cds-layout="horizontal gap:md align:vertical-center">
+    <h1 cds-text="heading">{{ pantryName }} Inventory</h1>
+    <cds-badge status="info">{{ inventoryItems.length }} Items</cds-badge>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" cds-layout="vertical gap:md align:center p:xl">
+    <cds-progress-circle status="info" size="xl"></cds-progress-circle>
+    <p cds-text="body">Loading inventory data...</p>
+  </div>
+  
+  <!-- Inventory Management -->
+  <div *ngIf="!isLoading" cds-layout="vertical gap:lg">
+    <!-- Action Bar -->
+    <div cds-layout="horizontal gap:md wrap:wrap align:vertical-center">
+      <!-- Search -->
+      <cds-input style="min-width: 300px;">
+        <label>Search Inventory</label>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          placeholder="Search by name or category"
+        />
+        <cds-control-action action="suffix" aria-label="Search">
+          <cds-icon shape="search"></cds-icon>
+        </cds-control-action>
+      </cds-input>
+      
+      <!-- Category Filter -->
+      <cds-select>
+        <label>Filter by Category</label>
+        <select [(ngModel)]="selectedCategory">
+          <option value="all">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </cds-select>
+      
+      <!-- Add Item Button -->
+      <div cds-layout="align:right" style="margin-left: auto;">
+        <cds-button action="solid" status="primary" (click)="openAddItemModal()">
+          <cds-icon shape="plus" size="16"></cds-icon>
+          Add New Item
+        </cds-button>
+      </div>
+    </div>
+    
+    <!-- Inventory Table -->
+    <cds-card>
+      <table cds-table>
+        <thead>
+          <tr>
+            <th (click)="toggleSort('name')" class="sortable-header">
+              Name
+              <cds-icon 
+                *ngIf="sortBy === 'name'" 
+                [shape]="sortDirection === 'asc' ? 'arrow up' : 'arrow down'" 
+                size="12"
+              ></cds-icon>
+            </th>
+            <th (click)="toggleSort('category')" class="sortable-header">
+              Category
+              <cds-icon 
+                *ngIf="sortBy === 'category'" 
+                [shape]="sortDirection === 'asc' ? 'arrow up' : 'arrow down'" 
+                size="12"
+              ></cds-icon>
+            </th>
+            <th (click)="toggleSort('quantity')" class="sortable-header">
+              Quantity
+              <cds-icon 
+                *ngIf="sortBy === 'quantity'" 
+                [shape]="sortDirection === 'asc' ? 'arrow up' : 'arrow down'" 
+                size="12"
+              ></cds-icon>
+            </th>
+            <th (click)="toggleSort('expirationDate')" class="sortable-header">
+              Expiration Date
+              <cds-icon 
+                *ngIf="sortBy === 'expirationDate'" 
+                [shape]="sortDirection === 'asc' ? 'arrow up' : 'arrow down'" 
+                size="12"
+              ></cds-icon>
+            </th>
+            <th>Dietary Info</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of getFilteredItems()" [ngClass]="getExpirationClass(item.expirationDate)">
+            <td>{{ item.name }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.expirationDate | date:'MM/dd/yyyy' }}</td>
+            <td>
+              <div cds-layout="horizontal gap:xs wrap:true">
+                <cds-tag *ngFor="let flag of item.dietaryFlags" size="sm">{{ flag }}</cds-tag>
+                <span *ngIf="item.dietaryFlags.length === 0" cds-text="body secondary">None</span>
+              </div>
+            </td>
+            <td>
+              <div cds-layout="horizontal gap:sm">
+                <cds-button action="flat-inline" (click)="openEditItemModal(item)">
+                  <cds-icon shape="pencil" size="16"></cds-icon>
+                </cds-button>
+                <cds-button action="flat-inline" status="danger" (click)="openDeleteConfirmation(item)">
+                  <cds-icon shape="trash" size="16"></cds-icon>
+                </cds-button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- Empty State -->
+      <div *ngIf="getFilteredItems().length === 0" cds-layout="vertical gap:md align:center p:lg">
+        <cds-icon shape="info-circle" size="48" class="empty-icon"></cds-icon>
+        <h3 cds-text="section">No items found</h3>
+        <p cds-text="body">No inventory items match your current filters.</p>
+        <cds-button action="outline" (click)="selectedCategory = 'all'; searchTerm = ''">
+          <cds-icon shape="refresh" size="16"></cds-icon>
+          Reset Filters
+        </cds-button>
+      </div>
+    </cds-card>
+  </div>
+  
+  <!-- Add Item Modal -->
+  <div *ngIf="showAddItemModal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <cds-modal>
+        <cds-modal-header>
+          <h3 cds-text="section">Add New Inventory Item</h3>
+        </cds-modal-header>
+        
+        <cds-modal-content>
+          <form [formGroup]="itemForm" cds-layout="vertical gap:lg">
+            <cds-form-group>
+              <cds-input>
+                <label>Item Name</label>
+                <input 
+                  type="text" 
+                  formControlName="name"
+                  placeholder="Enter item name"
+                  [attr.aria-invalid]="itemForm.get('name')?.invalid && itemForm.get('name')?.touched"
+                />
+                <cds-control-message 
+                  *ngIf="itemForm.get('name')?.invalid && itemForm.get('name')?.touched"
+                  status="error"
+                >
+                  Item name is required
+                </cds-control-message>
+              </cds-input>
+            </cds-form-group>
+            
+            <div cds-layout="grid cols:12 gap:md">
+              <div cds-layout="col:6@md col:12@sm">
+                <cds-form-group>
+                  <cds-select>
+                    <label>Category</label>
+                    <select formControlName="category">
+                      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                    </select>
+                  </cds-select>
+                </cds-form-group>
+              </div>
+              
+              <div cds-layout="col:6@md col:12@sm">
+                <cds-form-group>
+                  <cds-input>
+                    <label>Quantity</label>
+                    <input 
+                      type="number" 
+                      formControlName="quantity"
+                      min="1"
+                      [attr.aria-invalid]="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched"
+                    />
+                    <cds-control-message 
+                      *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched"
+                      status="error"
+                    >
+                      Quantity must be at least 1
+                    </cds-control-message>
+                  </cds-input>
+                </cds-form-group>
+              </div>
+            </div>
+            
+            <cds-form-group>
+              <cds-date>
+                <label>Expiration Date</label>
+                <input 
+                  type="date" 
+                  formControlName="expirationDate"
+                  [attr.aria-invalid]="itemForm.get('expirationDate')?.invalid && itemForm.get('expirationDate')?.touched"
+                />
+                <cds-control-message 
+                  *ngIf="itemForm.get('expirationDate')?.invalid && itemForm.get('expirationDate')?.touched"
+                  status="error"
+                >
+                  Expiration date is required
+                </cds-control-message>
+              </cds-date>
+            </cds-form-group>
+            
+            <cds-form-group>
+              <cds-textarea>
+                <label>Nutritional Information</label>
+                <textarea 
+                  formControlName="nutritionalInfo"
+                  placeholder="Enter nutritional information (optional)"
+                ></textarea>
+              </cds-textarea>
+            </cds-form-group>
+            
+            <div cds-layout="vertical gap:sm">
+              <label cds-text="subsection">Dietary Information</label>
+              <div cds-layout="grid cols:12 gap:sm">
+                <div cds-layout="col:4@md col:6@sm" *ngFor="let flag of dietaryFlags">
+                  <cds-checkbox>
+                    <label>{{ flag }}</label>
+                    <input 
+                      type="checkbox" 
+                      [checked]="isDietaryFlagSelected(flag)"
+                      (change)="toggleDietaryFlag(flag)"
+                    />
+                  </cds-checkbox>
+                </div>
+              </div>
+            </div>
+          </form>
+        </cds-modal-content>
+        
+        <cds-modal-actions>
+          <cds-button action="outline" (click)="closeModals()">Cancel</cds-button>
+          <cds-button action="solid" status="primary" (click)="addItem()" [disabled]="itemForm.invalid || isSaving">
+            <cds-icon *ngIf="isSaving" shape="spinner" size="16"></cds-icon>
+            <span>{{ isSaving ? 'Adding...' : 'Add Item' }}</span>
+          </cds-button>
+        </cds-modal-actions>
+      </cds-modal>
+    </div>
+  </div>
+  
+  <!-- Edit Item Modal -->
+  <div *ngIf="showEditItemModal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <cds-modal>
+        <cds-modal-header>
+          <h3 cds-text="section">Edit Inventory Item</h3>
+        </cds-modal-header>
+        
+        <cds-modal-content>
+          <form [formGroup]="itemForm" cds-layout="vertical gap:lg">
+            <cds-form-group>
+              <cds-input>
+                <label>Item Name</label>
+                <input 
+                  type="text" 
+                  formControlName="name"
+                  placeholder="Enter item name"
+                  [attr.aria-invalid]="itemForm.get('name')?.invalid && itemForm.get('name')?.touched"
+                />
+                <cds-control-message 
+                  *ngIf="itemForm.get('name')?.invalid && itemForm.get('name')?.touched"
+                  status="error"
+                >
+                  Item name is required
+                </cds-control-message>
+              </cds-input>
+            </cds-form-group>
+            
+            <div cds-layout="grid cols:12 gap:md">
+              <div cds-layout="col:6@md col:12@sm">
+                <cds-form-group>
+                  <cds-select>
+                    <label>Category</label>
+                    <select formControlName="category">
+                      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                    </select>
+                  </cds-select>
+                </cds-form-group>
+              </div>
+              
+              <div cds-layout="col:6@md col:12@sm">
+                <cds-form-group>
+                  <cds-input>
+                    <label>Quantity</label>
+                    <input 
+                      type="number" 
+                      formControlName="quantity"
+                      min="1"
+                      [attr.aria-invalid]="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched"
+                    />
+                    <cds-control-message 
+                      *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched"
+                      status="error"
+                    >
+                      Quantity must be at least 1
+                    </cds-control-message>
+                  </cds-input>
+                </cds-form-group>
+              </div>
+            </div>
+            
+            <cds-form-group>
+              <cds-date>
+                <label>Expiration Date</label>
+                <input 
+                  type="date" 
+                  formControlName="expirationDate"
+                  [attr.aria-invalid]="itemForm.get('expirationDate')?.invalid && itemForm.get('expirationDate')?.touched"
+                />
+                <cds-control-message 
+                  *ngIf="itemForm.get('expirationDate')?.invalid && itemForm.get('expirationDate')?.touched"
+                  status="error"
+                >
+                  Expiration date is required
+                </cds-control-message>
+              </cds-date>
+            </cds-form-group>
+            
+            <cds-form-group>
+              <cds-textarea>
+                <label>Nutritional Information</label>
+                <textarea 
+                  formControlName="nutritionalInfo"
+                  placeholder="Enter nutritional information (optional)"
+                ></textarea>
+              </cds-textarea>
+            </cds-form-group>
+            
+            <div cds-layout="vertical gap:sm">
+              <label cds-text="subsection">Dietary Information</label>
+              <div cds-layout="grid cols:12 gap:sm">
+                <div cds-layout="col:4@md col:6@sm" *ngFor="let flag of dietaryFlags">
+                  <cds-checkbox>
+                    <label>{{ flag }}</label>
+                    <input 
+                      type="checkbox" 
+                      [checked]="isDietaryFlagSelected(flag)"
+                      (change)="toggleDietaryFlag(flag)"
+                    />
+                  </cds-checkbox>
+                </div>
+              </div>
+            </div>
+          </form>
+        </cds-modal-content>
+        
+        <cds-modal-actions>
+          <cds-button action="outline" (click)="closeModals()">Cancel</cds-button>
+          <cds-button action="solid" status="primary" (click)="updateItem()" [disabled]="itemForm.invalid || isSaving">
+            <cds-icon *ngIf="isSaving" shape="spinner" size="16"></cds-icon>
+            <span>{{ isSaving ? 'Updating...' : 'Update Item' }}</span>
+          </cds-button>
+        </cds-modal-actions>
+      </cds-modal>
+    </div>
+  </div>
+  
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteConfirmation" class="modal-backdrop">
+    <div class="modal-dialog">
+      <cds-modal>
+        <cds-modal-header>
+          <h3 cds-text="section">Confirm Deletion</h3>
+        </cds-modal-header>
+        
+        <cds-modal-content>
+          <cds-alert status="danger" closable="false">
+            <cds-alert-content>
+              Are you sure you want to delete <strong>{{ selectedItem?.name }}</strong>? This action cannot be undone.
+            </cds-alert-content>
+          </cds-alert>
+        </cds-modal-content>
+        
+        <cds-modal-actions>
+          <cds-button action="outline" (click)="closeModals()">Cancel</cds-button>
+          <cds-button action="solid" status="danger" (click)="deleteItem()" [disabled]="isSaving">
+            <cds-icon *ngIf="isSaving" shape="spinner" size="16"></cds-icon>
+            <span>{{ isSaving ? 'Deleting...' : 'Delete Item' }}</span>
+          </cds-button>
+        </cds-modal-actions>
+      </cds-modal>
+    </div>
+  </div>
+</div>

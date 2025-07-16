@@ -1,0 +1,53 @@
+/* User Preferences Component Styles */
+
+cds-card {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--cds-global-color-gray-200);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--cds-global-color-construction-600);
+    margin-bottom: 1rem;
+  }
+}
+
+// Section icons
+cds-icon[size="24"] {
+  color: var(--cds-global-color-construction-500);
+}
+
+// Form group styling
+cds-form-group {
+  width: 100%;
+}
+
+// Checkbox styling
+cds-checkbox {
+  margin-bottom: 0.5rem;
+}
+
+// Animation for loading spinner
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+cds-icon[shape="spinner"] {
+  animation: spin 1s linear infinite;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  [cds-layout="horizontal gap:md align:right"] {
+    flex-direction: column;
+    align-items: stretch;
+    
+    cds-button {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+}

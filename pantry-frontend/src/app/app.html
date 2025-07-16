@@ -1,32 +1,74 @@
-<header class="app-header">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a routerLink="/" class="brand-link">{{ title() }}</a>
-    </div>
+<nav class="navbar animate-fade-in">
+  <a class="navbar-brand" routerLink="/">
+    <svg width="32" height="32" viewBox="0 0 32 32" class="mr-2">
+      <rect fill="#3a86ff" x="0" y="0" width="32" height="32" rx="4"></rect>
+      <g transform="translate(4.000000, 4.000000)">
+        <rect fill="#FFFFFF" x="6" y="4" width="12" height="16" rx="1"></rect>
+        <rect fill="#3a86ff" x="8" y="6" width="3" height="3" rx="0.5"></rect>
+        <rect fill="#3a86ff" x="13" y="6" width="3" height="3" rx="0.5"></rect>
+        <rect fill="#3a86ff" x="10.5" y="12" width="3" height="8" rx="0"></rect>
+        <circle fill="#06d6a0" cx="4" cy="18" r="2"></circle>
+        <circle fill="#ffbe0b" cx="20" cy="18" r="2"></circle>
+        <polygon fill="#FFFFFF" points="12 0 24 4 0 4"></polygon>
+      </g>
+    </svg>
+    <span>{{ title() }}</span>
+  </a>
+  
+  <ul class="navbar-nav animate-slide-down">
+    <li>
+      <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i> Home
+      </a>
+    </li>
+    <li>
+      <a class="nav-link" routerLink="/search" routerLinkActive="active">
+        <i class="fas fa-search"></i> Find Pantries
+      </a>
+    </li>
     
-    <div class="navbar-menu">
-      <div class="navbar-nav">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Home</a>
-        <a routerLink="/search" routerLinkActive="active" class="nav-link">Find Pantries</a>
-        
-        @if (authService.isAuthenticated()) {
-          <a routerLink="/preferences" routerLinkActive="active" class="nav-link">Preferences</a>
-          <button (click)="logout()" class="nav-link logout-btn">Logout</button>
-        } @else {
-          <a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a>
-          <a routerLink="/register" routerLinkActive="active" class="nav-link">Register</a>
-        }
-      </div>
-    </div>
-  </nav>
-</header>
+    @if (authService.isAuthenticated()) {
+      <li>
+        <a class="nav-link" routerLink="/preferences" routerLinkActive="active">
+          <i class="fas fa-cog"></i> Preferences
+        </a>
+      </li>
+      <li>
+        <a class="nav-link" routerLink="/analytics" routerLinkActive="active">
+          <i class="fas fa-chart-bar"></i> Analytics
+        </a>
+      </li>
+    }
+  </ul>
+  
+  <div class="animate-slide-left">
+    @if (authService.isAuthenticated()) {
+      <button class="btn btn-outline" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    } @else {
+      <a class="btn btn-outline mr-2" routerLink="/login">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </a>
+      <a class="btn btn-primary" routerLink="/register">
+        <i class="fas fa-user-plus"></i> Register
+      </a>
+    }
+  </div>
+</nav>
 
-<main class="app-main">
+<main class="container py-4">
   <router-outlet></router-outlet>
 </main>
 
-<footer class="app-footer">
-  <div class="footer-content">
-    <p>&copy; 2025 PantryLink. Connecting communities with food resources.</p>
+<footer class="bg-dark text-light p-4 text-center">
+  <div class="container">
+    <p class="mb-1">&copy; 2025 PantryLink. Connecting communities with food resources.</p>
+    <div class="d-flex justify-content-center mt-2">
+      <a href="#" class="text-light mx-2"><i class="fab fa-facebook"></i></a>
+      <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="text-light mx-2"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
+    </div>
   </div>
 </footer>

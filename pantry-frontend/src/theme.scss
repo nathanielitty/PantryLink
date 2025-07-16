@@ -1,0 +1,156 @@
+// Custom theme for PantryLink using Clarity Design System
+
+// Primary brand colors
+:root {
+  // Primary brand color - blue
+  --cds-global-color-construction-50: #e3f2fd;
+  --cds-global-color-construction-100: #bbdefb;
+  --cds-global-color-construction-200: #90caf9;
+  --cds-global-color-construction-300: #64b5f6;
+  --cds-global-color-construction-400: #42a5f5;
+  --cds-global-color-construction-500: #2196f3;
+  --cds-global-color-construction-600: #1e88e5;
+  --cds-global-color-construction-700: #1976d2;
+  --cds-global-color-construction-800: #1565c0;
+  --cds-global-color-construction-900: #0d47a1;
+  
+  // Accent color - green for success states
+  --cds-global-color-green-50: #e8f5e9;
+  --cds-global-color-green-100: #c8e6c9;
+  --cds-global-color-green-200: #a5d6a7;
+  --cds-global-color-green-300: #81c784;
+  --cds-global-color-green-400: #66bb6a;
+  --cds-global-color-green-500: #4caf50;
+  --cds-global-color-green-600: #43a047;
+  --cds-global-color-green-700: #388e3c;
+  --cds-global-color-green-800: #2e7d32;
+  --cds-global-color-green-900: #1b5e20;
+  
+  // Warning color - orange
+  --cds-global-color-orange-50: #fff3e0;
+  --cds-global-color-orange-100: #ffe0b2;
+  --cds-global-color-orange-200: #ffcc80;
+  --cds-global-color-orange-300: #ffb74d;
+  --cds-global-color-orange-400: #ffa726;
+  --cds-global-color-orange-500: #ff9800;
+  --cds-global-color-orange-600: #fb8c00;
+  --cds-global-color-orange-700: #f57c00;
+  --cds-global-color-orange-800: #ef6c00;
+  --cds-global-color-orange-900: #e65100;
+  
+  // Danger color - red
+  --cds-global-color-red-50: #ffebee;
+  --cds-global-color-red-100: #ffcdd2;
+  --cds-global-color-red-200: #ef9a9a;
+  --cds-global-color-red-300: #e57373;
+  --cds-global-color-red-400: #ef5350;
+  --cds-global-color-red-500: #f44336;
+  --cds-global-color-red-600: #e53935;
+  --cds-global-color-red-700: #d32f2f;
+  --cds-global-color-red-800: #c62828;
+  --cds-global-color-red-900: #b71c1c;
+  
+  // RGB values for opacity adjustments
+  --cds-global-color-red-500-rgb: 244, 67, 54;
+  --cds-global-color-orange-500-rgb: 255, 152, 0;
+  --cds-global-color-yellow-500-rgb: 255, 235, 59;
+  
+  // Custom component styles
+  --cds-alias-object-border-radius-100: 8px;
+  --cds-alias-object-border-width-100: 1px;
+  --cds-alias-object-shadow-100: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --cds-alias-object-shadow-200: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --cds-alias-object-shadow-300: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+// Global styles
+body {
+  font-family: 'Clarity City', 'Avenir Next', Arial, sans-serif;
+  color: var(--cds-global-color-gray-900);
+  background-color: var(--cds-global-color-gray-50);
+  margin: 0;
+  padding: 0;
+}
+
+// Card styling
+cds-card {
+  border-radius: 8px;
+  box-shadow: var(--cds-alias-object-shadow-100);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    box-shadow: var(--cds-alias-object-shadow-200);
+  }
+}
+
+// Button styling
+cds-button {
+  border-radius: 4px;
+  
+  &[action="solid"][status="primary"] {
+    background-color: var(--cds-global-color-construction-600);
+    
+    &:hover {
+      background-color: var(--cds-global-color-construction-700);
+    }
+  }
+  
+  &[action="outline"] {
+    border-color: var(--cds-global-color-construction-600);
+    color: var(--cds-global-color-construction-600);
+    
+    &:hover {
+      background-color: var(--cds-global-color-construction-50);
+    }
+  }
+}
+
+// Header styling
+cds-header {
+  background-color: var(--cds-global-color-construction-700);
+  color: white;
+}
+
+// Form control styling
+cds-input, cds-select, cds-textarea, cds-checkbox, cds-radio, cds-date {
+  margin-bottom: 1rem;
+}
+
+// Table styling
+table[cds-table] {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th {
+    background-color: var(--cds-global-color-gray-100);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+  }
+  
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--cds-global-color-gray-200);
+  }
+  
+  tr:hover {
+    background-color: var(--cds-global-color-gray-50);
+  }
+}
+
+// Alert styling
+cds-alert {
+  margin-bottom: 1rem;
+}
+
+// Progress indicator styling
+cds-progress-circle {
+  margin: 1rem 0;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  [cds-layout="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}

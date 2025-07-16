@@ -1,0 +1,468 @@
+/* Pantry Search Component Styles */
+
+.search-container {
+  padding: 2rem 0;
+}
+
+/* Search Header */
+.search-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.search-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, var(--primary-dark), var(--primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.search-header p {
+  font-size: 1.2rem;
+  color: var(--gray-600);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Search Form Card */
+.search-form-card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 3rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.search-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+}
+
+.search-form-content {
+  padding: 2rem;
+}
+
+.search-form-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--gray-800);
+}
+
+.search-form-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-500);
+}
+
+.input-with-icon .form-control {
+  padding-left: 2.5rem;
+}
+
+.search-button-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.search-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-width: 180px;
+}
+
+/* Loading Container */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(58, 134, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-container span {
+  font-size: 1.1rem;
+  color: var(--gray-600);
+}
+
+/* Results Header */
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.results-header h2 {
+  font-size: 1.8rem;
+  color: var(--gray-800);
+  margin: 0;
+}
+
+.zip-badge {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Alert */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 2rem;
+}
+
+.alert-info {
+  background-color: rgba(58, 134, 255, 0.1);
+  border-left: 4px solid var(--primary);
+}
+
+.alert i {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.alert strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.alert p {
+  margin: 0;
+  color: var(--gray-700);
+}
+
+/* Pantry Grid */
+.pantry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+/* Pantry Card */
+.pantry-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pantry-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+.pantry-card-inner {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pantry Image */
+.pantry-image-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.pantry-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.pantry-card:hover .pantry-image {
+  transform: scale(1.05);
+}
+
+.pantry-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: white;
+}
+
+.success {
+  background-color: var(--success);
+}
+
+.warning {
+  background-color: var(--warning);
+  color: var(--dark);
+}
+
+.danger {
+  background-color: var(--danger);
+}
+
+.pantry-distance {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Pantry Info */
+.pantry-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pantry-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--gray-900);
+}
+
+.pantry-details {
+  margin-bottom: 1.5rem;
+}
+
+.pantry-details p {
+  margin-bottom: 0.5rem;
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pantry-details i {
+  color: var(--primary);
+  width: 16px;
+  text-align: center;
+}
+
+.pantry-inventory {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.inventory-badge {
+  background-color: rgba(6, 214, 160, 0.1);
+  color: var(--success);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.updated-badge {
+  background-color: rgba(58, 134, 255, 0.1);
+  color: var(--primary);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Tags */
+.pantry-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  background-color: var(--gray-200);
+  color: var(--gray-700);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease;
+}
+
+.tag:hover {
+  background-color: var(--gray-300);
+}
+
+/* Action Buttons */
+.pantry-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.pantry-actions .btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Tips Card */
+.tips-card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-top: 3rem;
+  border-left: 4px solid var(--warning);
+}
+
+.tips-content {
+  padding: 1.5rem;
+}
+
+.tips-content h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--gray-800);
+}
+
+.tips-content h3 i {
+  color: var(--warning);
+}
+
+.tips-content ul {
+  padding-left: 2rem;
+  margin-bottom: 0;
+}
+
+.tips-content li {
+  margin-bottom: 0.5rem;
+  color: var(--gray-700);
+}
+
+.tips-content li:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .search-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .pantry-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .search-header h1 {
+    font-size: 2rem;
+  }
+  
+  .search-form-inputs {
+    flex-direction: column;
+  }
+  
+  .search-button-container {
+    width: 100%;
+  }
+  
+  .search-btn {
+    width: 100%;
+  }
+  
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .pantry-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pantry-actions {
+    flex-direction: column;
+  }
+}
+
+/* Animation Delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }

@@ -1,0 +1,114 @@
+/* Barcode Scanner Component Styles */
+
+// Scanner container
+.scanner-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  
+  zxing-scanner {
+    width: 100%;
+    height: 100%;
+    
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+// Scanner overlay with targeting box
+.scanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  
+  .scanner-target {
+    width: 200px;
+    height: 200px;
+    border: 2px solid var(--cds-global-color-construction-400);
+    border-radius: 8px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--cds-global-color-construction-400);
+      border-style: solid;
+      border-width: 0;
+    }
+    
+    &::before {
+      top: -2px;
+      left: -2px;
+      border-top-width: 2px;
+      border-left-width: 2px;
+      border-top-left-radius: 8px;
+    }
+    
+    &::after {
+      bottom: -2px;
+      right: -2px;
+      border-bottom-width: 2px;
+      border-right-width: 2px;
+      border-bottom-right-radius: 8px;
+    }
+  }
+}
+
+// Form card
+.form-card {
+  border-left: 4px solid var(--cds-global-color-success-400);
+}
+
+// Help section
+.help-card {
+  background-color: var(--cds-global-color-gray-50);
+  
+  .help-icon {
+    color: var(--cds-global-color-construction-600);
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Empty state styling
+.empty-icon {
+  color: var(--cds-global-color-gray-500);
+}
+
+// Animation for loading spinner
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+cds-icon[shape="spinner"] {
+  animation: spin 1s linear infinite;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .scanner-container {
+    height: 250px;
+  }
+  
+  [cds-layout="horizontal gap:md"] {
+    flex-direction: column;
+    
+    cds-button {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
