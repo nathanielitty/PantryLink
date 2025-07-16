@@ -13,6 +13,8 @@ interface InventoryItem {
   dietaryFlags: string[];
   dateAdded: Date;
   lastUpdated: Date;
+  brand?: string;
+  unit?: string;
 }
 
 @Component({
@@ -35,14 +37,19 @@ export class InventoryManagement implements OnInit {
   // Search and filter
   searchTerm: string = '';
   selectedCategory: string = 'all';
-  sortBy: string = 'name';
   sortDirection: 'asc' | 'desc' = 'asc';
+  sortColumn: string = 'name';
+  
+  // View mode
+  isGridView: boolean = false;
   
   // Item form
   itemForm: FormGroup;
+  editItemForm: FormGroup;
   
   // Selected item for edit/delete
   selectedItem: InventoryItem | null = null;
+  itemToDelete: InventoryItem | null = null;
   
   // Inventory items
   inventoryItems: InventoryItem[] = [];
@@ -86,7 +93,27 @@ export class InventoryManagement implements OnInit {
       category: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       expirationDate: ['', Validators.required],
-      nutritionalInfo: ['']
+      nutritionalInfo: [''],
+      brand: [''],
+      unit: ['items'],
+      isVegan: [false],
+      isVegetarian: [false],
+      isGlutenFree: [false],
+      isOrganic: [false]
+    });
+    
+    this.editItemForm = this.fb.group({
+      name: ['', Validators.required],
+      category: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      expirationDate: ['', Validators.required],
+      nutritionalInfo: [''],
+      brand: [''],
+      unit: ['items'],
+      isVegan: [false],
+      isVegetarian: [false],
+      isGlutenFree: [false],
+      isOrganic: [false]
     });
   }
 
@@ -114,7 +141,9 @@ export class InventoryManagement implements OnInit {
           nutritionalInfo: 'High in protein and fiber',
           dietaryFlags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
           dateAdded: new Date('2025-06-01'),
-          lastUpdated: new Date('2025-06-15')
+          lastUpdated: new Date('2025-06-15'),
+          brand: 'Green Valley',
+          unit: 'cans'
         },
         {
           id: 2,
@@ -125,7 +154,9 @@ export class InventoryManagement implements OnInit {
           nutritionalInfo: 'Good source of carbohydrates',
           dietaryFlags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
           dateAdded: new Date('2025-06-02'),
-          lastUpdated: new Date('2025-06-02')
+          lastUpdated: new Date('2025-06-02'),
+          brand: 'Uncle Ben\'s',
+          unit: 'lbs'
         },
         {
           id: 3,
@@ -136,7 +167,9 @@ export class InventoryManagement implements OnInit {
           nutritionalInfo: 'Good source of carbohydrates',
           dietaryFlags: ['Vegetarian', 'Vegan'],
           dateAdded: new Date('2025-06-03'),
-          lastUpdated: new Date('2025-06-10')
+          lastUpdated: new Date('2025-06-10'),
+          brand: 'Barilla',
+          unit: 'boxes'
         },
         {
           id: 4,
@@ -147,7 +180,9 @@ export class InventoryManagement implements OnInit {
           nutritionalInfo: 'Varies by type',
           dietaryFlags: [],
           dateAdded: new Date('2025-06-04'),
-          lastUpdated: new Date('2025-06-04')
+          lastUpdated: new Date('2025-06-04'),
+          brand: 'Campbell\'s',
+          unit: 'cans'
         },
         {
           id: 5,
@@ -158,7 +193,9 @@ export class InventoryManagement implements OnInit {
           nutritionalInfo: 'High in fiber and vitamin C',
           dietaryFlags: ['Vegetarian', 'Vegan', 'Gluten-Free'],
           dateAdded: new Date('2025-06-05'),
-          lastUpdated: new Date('2025-06-05')
+          lastUpdated: new Date('2025-06-05'),
+          brand: 'Local Farm',
+          unit: 'lbs'
         },
         {
           id: 6,
@@ -169,7 +206,9 @@ export class InventoryManagement implements OnInit {
           nutritionalInfo: 'Good source of calcium and vitamin D',
           dietaryFlags: ['Vegetarian'],
           dateAdded: new Date('2025-06-06'),
-          lastUpdated: new Date('2025-06-06')
+          lastUpdated: new Date('2025-06-06'),
+          brand: 'Organic Valley',
+          unit: 'gallons'
         }
       ];
       
@@ -192,7 +231,7 @@ export class InventoryManagement implements OnInit {
       // Sort by selected column
       let comparison = 0;
       
-      switch (this.sortBy) {
+      switch (this.sortColumn) {
         case 'name':
           comparison = a.name.localeCompare(b.name);
           break;
@@ -303,28 +342,39 @@ export class InventoryManagement implements OnInit {
     }
   }
 
-  deleteItem() {
-    if (this.selectedItem) {
-      this.isSaving = true;
-      
-      // Simulate API call
-      setTimeout(() => {
-        this.inventoryItems = this.inventoryItems.filter(item => item.id !== this.selectedItem?.id);
-        this.isSaving = false;
-        this.closeModals();
-      }, 1000);
-    }
-  }
-
-  toggleSort(column: string) {
-    if (this.sortBy === column) {
+  sortBy(column: string) {
+    if (this.sortColumn === column) {
       // Toggle direction if already sorting by this column
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       // Set new sort column and default to ascending
-      this.sortBy = column;
+      this.sortColumn = column;
       this.sortDirection = 'asc';
     }
+    
+    // Sort the inventory items
+    this.inventoryItems.sort((a, b) => {
+      let aValue = (a as any)[column];
+      let bValue = (b as any)[column];
+      
+      // Handle date sorting
+      if (column === 'expirationDate' || column === 'dateAdded') {
+        aValue = new Date(aValue).getTime();
+        bValue = new Date(bValue).getTime();
+      }
+      
+      // Handle string sorting
+      if (typeof aValue === 'string') {
+        aValue = aValue.toLowerCase();
+        bValue = bValue.toLowerCase();
+      }
+      
+      if (this.sortDirection === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
   }
 
   toggleDietaryFlag(flag: string) {
@@ -356,5 +406,109 @@ export class InventoryManagement implements OnInit {
 
   private formatDateForInput(date: Date): string {
     return date.toISOString().split('T')[0];
+  }
+  
+  // Methods referenced in the new HTML template
+  getExpiringCount(): number {
+    const today = new Date();
+    const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return this.inventoryItems.filter(item => 
+      new Date(item.expirationDate) <= sevenDaysFromNow && new Date(item.expirationDate) >= today
+    ).length;
+  }
+  
+  getCategoryCount(): number {
+    const uniqueCategories = new Set(this.inventoryItems.map(item => item.category));
+    return uniqueCategories.size;
+  }
+  
+  toggleView(): void {
+    this.isGridView = !this.isGridView;
+  }
+  
+  trackByFn(index: number, item: InventoryItem): number {
+    return item.id;
+  }
+  
+  isExpiringSoon(date: Date): boolean {
+    const today = new Date();
+    const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return new Date(date) <= sevenDaysFromNow;
+  }
+  
+  isLowStock(quantity: number): boolean {
+    return quantity <= 5; // Consider items with 5 or fewer as low stock
+  }
+  
+  filterExpiringSoon(): void {
+    // Filter to show only items expiring soon
+    this.selectedCategory = 'all';
+    this.searchTerm = '';
+    // Additional filtering logic can be added here
+  }
+  
+  filterLowStock(): void {
+    // Filter to show only low stock items
+    this.selectedCategory = 'all';
+    this.searchTerm = '';
+    // Additional filtering logic can be added here
+  }
+  
+  exportInventory(): void {
+    console.log('Exporting inventory...');
+    // Implementation for exporting inventory data
+  }
+  
+  printInventory(): void {
+    console.log('Printing inventory...');
+    // Implementation for printing inventory
+    window.print();
+  }
+  
+  formatDate(date: Date): string {
+    return new Date(date).toLocaleDateString();
+  }
+  
+  closeAddItemModal(): void {
+    this.showAddItemModal = false;
+    this.itemForm.reset();
+  }
+  
+  closeEditItemModal(): void {
+    this.showEditItemModal = false;
+    this.editItemForm.reset();
+    this.selectedItem = null;
+  }
+  
+  closeDeleteConfirmation(): void {
+    this.showDeleteConfirmation = false;
+    this.itemToDelete = null;
+  }
+  
+  editItem(item: InventoryItem): void {
+    this.selectedItem = item;
+    this.editItemForm.patchValue({
+      name: item.name,
+      category: item.category,
+      quantity: item.quantity,
+      expirationDate: this.formatDateForInput(new Date(item.expirationDate)),
+      nutritionalInfo: item.nutritionalInfo
+    });
+    this.showEditItemModal = true;
+  }
+  
+  deleteItem(id: number): void {
+    const item = this.inventoryItems.find(i => i.id === id);
+    if (item) {
+      this.itemToDelete = item;
+      this.showDeleteConfirmation = true;
+    }
+  }
+  
+  confirmDelete(): void {
+    if (this.itemToDelete) {
+      this.inventoryItems = this.inventoryItems.filter(item => item.id !== this.itemToDelete!.id);
+      this.closeDeleteConfirmation();
+    }
   }
 }

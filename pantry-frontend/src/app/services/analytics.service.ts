@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 export interface SystemAnalytics {
   id: number;
@@ -55,10 +56,23 @@ export interface ZipDistance {
 export class AnalyticsService {
   private readonly apiUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
 
   getDashboard(): Observable<AnalyticsDashboard> {
-    return this.http.get<AnalyticsDashboard>(`${this.apiUrl}/analytics/dashboard`);
+    return this.http.get<AnalyticsDashboard>(`${this.apiUrl}/analytics/dashboard`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getSystemAnalytics(date?: string): Observable<SystemAnalytics> {
@@ -66,7 +80,9 @@ export class AnalyticsService {
     if (date) {
       url += `?date=${encodeURIComponent(date)}`;
     }
-    return this.http.get<SystemAnalytics>(url);
+    return this.http.get<SystemAnalytics>(url, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getPantryAnalytics(pantryId: number, date?: string): Observable<PantryAnalytics> {
@@ -74,34 +90,46 @@ export class AnalyticsService {
     if (date) {
       url += `?date=${encodeURIComponent(date)}`;
     }
-    return this.http.get<PantryAnalytics>(url);
+    return this.http.get<PantryAnalytics>(url, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getTopPantries(count: number = 10): Observable<PantryAnalytics[]> {
     return this.http.get<PantryAnalytics[]>(`${this.apiUrl}/analytics/top-pantries`, { 
-      params: { count: count.toString() } 
+      params: { count: count.toString() },
+      headers: this.getAuthHeaders()
     });
   }
 
   getPopularCategories(): Observable<{ [key: string]: number }> {
-    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/analytics/popular-categories`);
+    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/analytics/popular-categories`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getSearchesByZipCode(): Observable<{ [key: string]: number }> {
-    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/analytics/searches-by-zip`);
+    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/analytics/searches-by-zip`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   updatePantryAnalytics(pantryId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/analytics/update-pantry/${pantryId}`, {});
+    return this.http.post(`${this.apiUrl}/analytics/update-pantry/${pantryId}`, {}, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   updateSystemAnalytics(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/analytics/update-system`, {});
+    return this.http.post(`${this.apiUrl}/analytics/update-system`, {}, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getDistance(fromZip: string, toZip: string): Observable<ZipDistance> {
     return this.http.get<ZipDistance>(`${this.apiUrl}/analytics/distance`, {
-      params: { fromZip, toZip }
+      params: { fromZip, toZip },
+      headers: this.getAuthHeaders()
     });
   }
 

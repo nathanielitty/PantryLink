@@ -1,21 +1,25 @@
-import { Component, AfterViewInit, HostListener, signal } from '@angular/core';
+import { Component, AfterViewInit, HostListener, signal, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { BreadcrumbService, Breadcrumb } from './services/breadcrumb.service';
+import { HamburgerMenuComponent } from './components/hamburger-menu/hamburger-menu.component';
+import { Observable } from 'rxjs';
+import { User } from './models/pantry.models';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, CommonModule],
+  imports: [RouterOutlet, RouterModule, CommonModule, HamburgerMenuComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App implements AfterViewInit {
+export class App implements AfterViewInit, OnInit {
   protected readonly title = signal('PantryLink');
   isScrolled = false;
   breadcrumbs: Breadcrumb[] = [];
   fabOpen = false;
+  currentUser$: Observable<User | null>;
 
   constructor(
     public authService: AuthService,
@@ -25,10 +29,14 @@ export class App implements AfterViewInit {
     this.breadcrumbService.breadcrumbs$.subscribe(breadcrumbs => {
       this.breadcrumbs = breadcrumbs;
     });
+    
+    // Subscribe to current user changes
+    this.currentUser$ = this.authService.currentUser$;
   }
-  
-  getCurrentUser() {
-    return this.authService.getCurrentUser();
+
+  ngOnInit() {
+    // Initialize current user from localStorage
+    this.authService.getCurrentUser();
   }
   
   ngAfterViewInit() {

@@ -61,7 +61,12 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     const userData = localStorage.getItem('user_data');
-    return userData ? JSON.parse(userData) : null;
+    if (userData) {
+      const user: User = JSON.parse(userData);
+      this.currentUserSubject.next(user);
+      return user;
+    }
+    return null;
   }
 
   isAuthenticated(): boolean {
@@ -80,6 +85,16 @@ export class AuthService {
   saveAuthData(authResponse: AuthResponse): void {
     localStorage.setItem('auth_token', authResponse.token);
     localStorage.setItem('user_data', JSON.stringify(authResponse.user));
-    this.currentUserSubject.next(authResponse.user);
+    // Create a User object from the auth response
+    const user: User = {
+      id: authResponse.user.id,
+      userName: authResponse.user.userName,
+      email: authResponse.user.email,
+      firstName: authResponse.user.firstName,
+      lastName: authResponse.user.lastName,
+      createdAt: new Date(),
+      preferences: []
+    };
+    this.currentUserSubject.next(user);
   }
 }

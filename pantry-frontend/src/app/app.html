@@ -43,7 +43,7 @@
     </li>
 
     <!-- Admin/Management Dropdown (when authenticated) -->
-    @if (authService.isAuthenticated()) {
+    @if (currentUser$ | async; as currentUser) {
       <li class="dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-cog"></i> Manage
@@ -80,7 +80,7 @@
         <a class="dropdown-item" routerLink="/donate/food">
           <i class="fas fa-donate"></i> Quick Donate
         </a>
-        @if (authService.isAuthenticated()) {
+        @if (currentUser$ | async; as currentUser) {
           <a class="dropdown-item" routerLink="/analytics">
             <i class="fas fa-chart-line"></i> View Analytics
           </a>
@@ -97,24 +97,30 @@
     </li>
   </ul>
   
-  <div class="animate-slide-left">
-    @if (authService.isAuthenticated()) {
-      <div class="user-info">
-        <span class="welcome-text">
-          <i class="fas fa-user"></i> Welcome, {{ getCurrentUser()?.firstName || 'User' }}!
-        </span>
-        <button class="btn btn-outline ml-2" (click)="logout()">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </div>
-    } @else {
-      <a class="btn btn-outline mr-2" routerLink="/login">
-        <i class="fas fa-sign-in-alt"></i> Login
-      </a>
-      <a class="btn btn-primary" routerLink="/register">
-        <i class="fas fa-user-plus"></i> Register
-      </a>
-    }
+  <div class="navbar-right">
+    <!-- Desktop Navigation -->
+    <div class="desktop-nav">
+      @if (currentUser$ | async; as currentUser) {
+        <div class="user-info">
+          <span class="welcome-text">
+            <i class="fas fa-user"></i> Welcome, {{ currentUser.firstName || 'User' }}!
+          </span>
+          <button class="btn btn-outline ml-2" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      } @else {
+        <a class="btn btn-outline mr-2" routerLink="/login">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
+        <a class="btn btn-primary mr-2" routerLink="/register">
+          <i class="fas fa-user-plus"></i> Register
+        </a>
+      }
+    </div>
+    
+    <!-- Hamburger Menu (Mobile) -->
+    <app-hamburger-menu></app-hamburger-menu>
   </div>
 </nav>
 
