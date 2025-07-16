@@ -1,0 +1,73 @@
+<div class="home-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1>Welcome to PantryLink</h1>
+      <p class="hero-subtitle">Your ZIP-Code-Centric Food Pantry Network</p>
+      <p class="hero-description">
+        Find food pantries in your area with real-time inventory and AI-powered recommendations
+      </p>
+      
+      <div class="search-section">
+        <h2>Find Food Pantries Near You</h2>
+        <div class="search-form">
+          <input 
+            type="text" 
+            [(ngModel)]="zipCode" 
+            placeholder="Enter your ZIP code" 
+            maxlength="5"
+            class="zip-input"
+          />
+          <button 
+            (click)="onSearch()" 
+            [disabled]="zipCode.length !== 5"
+            class="search-button"
+          >
+            Search Pantries
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="features-section">
+    <div class="container">
+      <h2>How PantryLink Helps</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <h3>ZIP Code Search</h3>
+          <p>Simply enter your ZIP code to find nearby food pantries instantly</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Real-Time Inventory</h3>
+          <p>See what's available right now with barcode scanning updates</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI Recommendations</h3>
+          <p>Get personalized suggestions based on your dietary preferences</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Priority Alerts</h3>
+          <p>Find items expiring soon and high-stock availability first</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Get Started Today</h2>
+      <p>Join our community and never miss out on available food assistance</p>
+      <div class="cta-buttons">
+        <a routerLink="/register" class="btn btn-primary">Create Account</a>
+        <a routerLink="/login" class="btn btn-secondary">Sign In</a>
+      </div>
+    </div>
+  </section>
+</div>
