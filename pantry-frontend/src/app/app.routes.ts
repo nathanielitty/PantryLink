@@ -8,6 +8,8 @@ import { InventoryManagement } from './components/inventory-management/inventory
 import { BarcodeScanner } from './components/barcode-scanner/barcode-scanner';
 import { UserPreferences } from './components/user-preferences/user-preferences';
 import { AnalyticsDashboardComponent } from './components/analytics-dashboard/analytics-dashboard.component';
+import { FoodDonationComponent } from './components/food-donation/food-donation';
+import { MonetaryDonationComponent } from './components/monetary-donation/monetary-donation';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,5 +21,7 @@ export const routes: Routes = [
   { path: 'scanner/:pantryId', component: BarcodeScanner },
   { path: 'preferences', component: UserPreferences },
   { path: 'analytics', component: AnalyticsDashboardComponent },
+  { path: 'donate/food', component: FoodDonationComponent },
+  { path: 'donate/money', component: MonetaryDonationComponent },
   { path: '**', redirectTo: '' }
 ];

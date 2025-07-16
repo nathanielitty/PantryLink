@@ -1,7 +1,8 @@
-import { Component, signal, HostListener, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, HostListener, signal } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { BreadcrumbService, Breadcrumb } from './services/breadcrumb.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,22 @@ import { AuthService } from './services/auth.service';
 export class App implements AfterViewInit {
   protected readonly title = signal('PantryLink');
   isScrolled = false;
+  breadcrumbs: Breadcrumb[] = [];
+  fabOpen = false;
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private breadcrumbService: BreadcrumbService
+  ) {
+    // Subscribe to breadcrumb changes
+    this.breadcrumbService.breadcrumbs$.subscribe(breadcrumbs => {
+      this.breadcrumbs = breadcrumbs;
+    });
+  }
+  
+  getCurrentUser() {
+    return this.authService.getCurrentUser();
+  }
   
   ngAfterViewInit() {
     // Initialize animations
@@ -52,7 +67,53 @@ export class App implements AfterViewInit {
     });
   }
 
+  showAbout() {
+    alert(`PantryLink - Food Pantry Network
+
+Version: 1.0.0
+Developed: 2025
+
+PantryLink is your ZIP-code-centric food pantry network that connects communities with local food resources. We provide:
+
+• Real-time pantry locator with distance calculations
+• Food and monetary donation capabilities  
+• Inventory management for pantry administrators
+• Analytics dashboard for tracking community impact
+• AI-powered recommendations for optimal pantry matching
+
+Built with Angular 20 and ASP.NET Core 8
+© 2025 PantryLink. All rights reserved.`);
+  }
+
+  showHelp() {
+    alert(`PantryLink Help & Support
+
+Getting Started:
+1. Enter your ZIP code on the home page to find nearby pantries
+2. Click "Find Pantries" to view available food resources
+3. Use the "Donate" menu to contribute food or money
+4. Create an account to access personalized features
+
+Features:
+• Pantry Search: Find food pantries by ZIP code
+• Donations: Contribute food items or monetary donations
+• User Preferences: Set dietary restrictions and preferences
+• Analytics: View pantry usage and community impact (logged in users)
+
+For technical support or questions:
+• Check the FAQ section
+• Contact support at support@pantrylink.org
+• Visit our documentation at docs.pantrylink.org
+
+Need immediate help? Call our support line: 1-800-PANTRY-1`);
+  }
+
+  toggleFab() {
+    this.fabOpen = !this.fabOpen;
+  }
+
   logout() {
     this.authService.logout();
+    window.location.reload();
   }
 }

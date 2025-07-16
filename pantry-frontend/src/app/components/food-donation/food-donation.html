@@ -1,0 +1,208 @@
+<div class="food-donation-container">
+  <div class="container">
+    <div class="donation-header">
+      <h1><i class="fas fa-apple-alt"></i> Donate Food</h1>
+      <p>Help your community by donating food items to local pantries</p>
+    </div>
+
+    <form (ngSubmit)="submitDonation()" #donationForm="ngForm" class="donation-form">
+      <!-- Pantry Selection -->
+      <div class="form-section">
+        <h3><i class="fas fa-map-marker-alt"></i> Select Pantry</h3>
+        <div class="form-group">
+          <label for="pantrySelect">Choose a pantry to donate to:</label>
+          <select 
+            id="pantrySelect"
+            class="form-control" 
+            [(ngModel)]="donation.pantryId" 
+            name="pantryId" 
+            required
+          >
+            <option value="">Select a pantry...</option>
+            <option [value]="pantry.id" *ngFor="let pantry of pantries">
+              {{ pantry.name }} - {{ pantry.address }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="form-section">
+        <h3><i class="fas fa-user"></i> Contact Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="donorName">Full Name:</label>
+            <input 
+              type="text" 
+              id="donorName"
+              class="form-control" 
+              [(ngModel)]="donation.contactInfo.name" 
+              name="donorName" 
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label for="donorEmail">Email:</label>
+            <input 
+              type="email" 
+              id="donorEmail"
+              class="form-control" 
+              [(ngModel)]="donation.contactInfo.email" 
+              name="donorEmail" 
+              required
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="donorPhone">Phone Number:</label>
+          <input 
+            type="tel" 
+            id="donorPhone"
+            class="form-control" 
+            [(ngModel)]="donation.contactInfo.phone" 
+            name="donorPhone" 
+            required
+          >
+        </div>
+      </div>
+
+      <!-- Food Items -->
+      <div class="form-section">
+        <h3><i class="fas fa-shopping-cart"></i> Food Items</h3>
+        <div class="items-container">
+          <div class="item-form" *ngFor="let item of donation.items; let i = index">
+            <div class="item-header">
+              <h4>Item {{ i + 1 }}</h4>
+              <button 
+                type="button" 
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeItem(i)"
+                [disabled]="donation.items.length === 1"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>Item Name:</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [(ngModel)]="item.name" 
+                  [name]="'itemName' + i"
+                  placeholder="e.g., Canned Tomatoes"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label>Category:</label>
+                <select 
+                  class="form-control" 
+                  [(ngModel)]="item.category" 
+                  [name]="'category' + i"
+                >
+                  <option *ngFor="let category of foodCategories" [value]="category">
+                    {{ category }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>Quantity:</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  [(ngModel)]="item.quantity" 
+                  [name]="'quantity' + i"
+                  min="1"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label>Unit:</label>
+                <select 
+                  class="form-control" 
+                  [(ngModel)]="item.unit" 
+                  [name]="'unit' + i"
+                >
+                  <option *ngFor="let unit of units" [value]="unit">{{ unit }}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Expiration Date (if applicable):</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  [(ngModel)]="item.expirationDate" 
+                  [name]="'expiration' + i"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button 
+          type="button" 
+          class="btn btn-outline-primary" 
+          (click)="addItem()"
+        >
+          <i class="fas fa-plus"></i> Add Another Item
+        </button>
+      </div>
+
+      <!-- Pickup Details -->
+      <div class="form-section">
+        <h3><i class="fas fa-clock"></i> Pickup Information</h3>
+        <div class="form-group">
+          <label for="pickupTime">Preferred Pickup Time:</label>
+          <input 
+            type="datetime-local" 
+            id="pickupTime"
+            class="form-control" 
+            [(ngModel)]="donation.preferredPickupTime" 
+            name="pickupTime"
+          >
+          <small class="form-text text-muted">
+            The pantry will contact you to confirm pickup arrangements
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <label for="notes">Additional Notes:</label>
+          <textarea 
+            id="notes"
+            class="form-control" 
+            [(ngModel)]="donation.notes" 
+            name="notes"
+            rows="3"
+            placeholder="Any special instructions or additional information..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-lg"
+          [disabled]="!isFormValid() || isSubmitting"
+        >
+          <i class="fas fa-heart" *ngIf="!isSubmitting"></i>
+          <i class="fas fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+          {{ isSubmitting ? 'Submitting...' : 'Submit Donation' }}
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn btn-outline-secondary btn-lg ml-3"
+          routerLink="/"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

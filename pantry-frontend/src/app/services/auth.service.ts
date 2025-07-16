@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { 
   AuthResponse, 
   LoginRequest, 
@@ -14,8 +14,16 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   private readonly apiUrl = `${environment.apiBaseUrl}/auth`;
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Initialize with existing user data if available
+    const userData = localStorage.getItem('user_data');
+    if (userData && this.isAuthenticated()) {
+      this.currentUserSubject.next(JSON.parse(userData));
+    }
+  }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials);
@@ -44,6 +52,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
+    this.currentUserSubject.next(null);
   }
 
   getToken(): string | null {
@@ -71,5 +80,6 @@ export class AuthService {
   saveAuthData(authResponse: AuthResponse): void {
     localStorage.setItem('auth_token', authResponse.token);
     localStorage.setItem('user_data', JSON.stringify(authResponse.user));
+    this.currentUserSubject.next(authResponse.user);
   }
 }

@@ -4,7 +4,9 @@
 .hero {
   position: relative;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
   color: white;
   overflow: hidden;
@@ -90,6 +92,8 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
+  position: relative;
+  z-index: 10;
 }
 
 .search-box h2 {
@@ -172,6 +176,7 @@
   width: 100%;
   line-height: 0;
   z-index: 2;
+  pointer-events: none;
 }
 
 .hero-wave svg {
@@ -248,10 +253,30 @@
   }
 }
 
+/* Full Width Sections */
+.full-width {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
 /* Stats Section */
 .stats-section {
   padding: 4rem 0;
   background-color: white;
+}
+
+.stats-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
 .stat-card {
@@ -261,7 +286,6 @@
   background: white;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-  margin-bottom: 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -300,6 +324,20 @@
 .features-section {
   padding: 6rem 0;
   background-color: var(--gray-100);
+}
+
+.features-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
 }
 
 .section-title {
@@ -395,10 +433,17 @@
   position: relative;
 }
 
+.timeline-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .timeline {
   position: relative;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 3rem auto 0;
   padding: 2rem 0;
 }
 
@@ -560,6 +605,13 @@
   color: white;
   position: relative;
   overflow: hidden;
+}
+
+.cta-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .cta-section::before {

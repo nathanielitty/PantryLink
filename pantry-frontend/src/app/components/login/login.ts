@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -9,8 +9,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrl: './login.scss'
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -19,12 +18,13 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
+      rememberMe: [false]
     });
   }
 
@@ -33,16 +33,30 @@ export class LoginComponent {
       this.isLoading = true;
       this.errorMessage = '';
       
-      const credentials = this.loginForm.value;
+      const loginData = {
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password
+      };
       
-      this.authService.login(credentials).subscribe({
+      this.authService.login(loginData).subscribe({
         next: (response) => {
+          console.log('Login successful:', response);
+          this.authService.saveAuthData(response);
           this.isLoading = false;
           this.router.navigate(['/']);
         },
         error: (error) => {
-          this.isLoading = false;
+          console.error('Login failed:', error);
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+          this.isLoading = false;
+        }
+      });
+    } else {
+      // Mark all fields as touched to show validation errors
+      Object.keys(this.loginForm.controls).forEach(key => {
+        const control = this.loginForm.get(key);
+        if (control) {
+          control.markAsTouched();
         }
       });
     }

@@ -13,7 +13,7 @@
   --cds-global-color-construction-700: #1976d2;
   --cds-global-color-construction-800: #1565c0;
   --cds-global-color-construction-900: #0d47a1;
-  
+
   // Accent color - green for success states
   --cds-global-color-green-50: #e8f5e9;
   --cds-global-color-green-100: #c8e6c9;
@@ -25,7 +25,7 @@
   --cds-global-color-green-700: #388e3c;
   --cds-global-color-green-800: #2e7d32;
   --cds-global-color-green-900: #1b5e20;
-  
+
   // Warning color - orange
   --cds-global-color-orange-50: #fff3e0;
   --cds-global-color-orange-100: #ffe0b2;
@@ -37,7 +37,7 @@
   --cds-global-color-orange-700: #f57c00;
   --cds-global-color-orange-800: #ef6c00;
   --cds-global-color-orange-900: #e65100;
-  
+
   // Danger color - red
   --cds-global-color-red-50: #ffebee;
   --cds-global-color-red-100: #ffcdd2;
@@ -49,12 +49,12 @@
   --cds-global-color-red-700: #d32f2f;
   --cds-global-color-red-800: #c62828;
   --cds-global-color-red-900: #b71c1c;
-  
+
   // RGB values for opacity adjustments
   --cds-global-color-red-500-rgb: 244, 67, 54;
   --cds-global-color-orange-500-rgb: 255, 152, 0;
   --cds-global-color-yellow-500-rgb: 255, 235, 59;
-  
+
   // Custom component styles
   --cds-alias-object-border-radius-100: 8px;
   --cds-alias-object-border-width-100: 1px;
@@ -77,7 +77,7 @@ cds-card {
   border-radius: 8px;
   box-shadow: var(--cds-alias-object-shadow-100);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  
+
   &:hover {
     box-shadow: var(--cds-alias-object-shadow-200);
   }
@@ -86,19 +86,19 @@ cds-card {
 // Button styling
 cds-button {
   border-radius: 4px;
-  
+
   &[action="solid"][status="primary"] {
     background-color: var(--cds-global-color-construction-600);
-    
+
     &:hover {
       background-color: var(--cds-global-color-construction-700);
     }
   }
-  
+
   &[action="outline"] {
     border-color: var(--cds-global-color-construction-600);
     color: var(--cds-global-color-construction-600);
-    
+
     &:hover {
       background-color: var(--cds-global-color-construction-50);
     }
@@ -112,7 +112,12 @@ cds-header {
 }
 
 // Form control styling
-cds-input, cds-select, cds-textarea, cds-checkbox, cds-radio, cds-date {
+cds-input,
+cds-select,
+cds-textarea,
+cds-checkbox,
+cds-radio,
+cds-date {
   margin-bottom: 1rem;
 }
 
@@ -120,19 +125,19 @@ cds-input, cds-select, cds-textarea, cds-checkbox, cds-radio, cds-date {
 table[cds-table] {
   width: 100%;
   border-collapse: collapse;
-  
+
   th {
     background-color: var(--cds-global-color-gray-100);
     font-weight: 600;
     text-align: left;
     padding: 0.75rem 1rem;
   }
-  
+
   td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--cds-global-color-gray-200);
   }
-  
+
   tr:hover {
     background-color: var(--cds-global-color-gray-50);
   }

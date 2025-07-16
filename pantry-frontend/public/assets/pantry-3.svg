@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400px" height="200px" viewBox="0 0 400 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Neighborhood Pantry</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#06D6A0" offset="0%"></stop>
+            <stop stop-color="#05B386" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#F8F9FA" x="0" y="0" width="400" height="200" rx="8"></rect>
+        
+        <!-- Building -->
+        <g transform="translate(20, 20)">
+            <!-- Main Building -->
+            <rect fill="#FFFFFF" x="0" y="40" width="150" height="110" rx="4"></rect>
+            <polygon fill="url(#linearGradient-1)" points="75 0 150 40 0 40"></polygon>
+            
+            <!-- Windows -->
+            <rect fill="#E0FFF7" x="20" y="60" width="30" height="30" rx="2"></rect>
+            <rect fill="#E0FFF7" x="100" y="60" width="30" height="30" rx="2"></rect>
+            <rect fill="#E0FFF7" x="60" y="60" width="30" height="30" rx="2"></rect>
+            
+            <!-- Door -->
+            <rect fill="#05B386" x="60" y="110" width="30" height="40" rx="2"></rect>
+            <circle fill="#FFD700" cx="65" cy="130" r="2"></circle>
+            
+            <!-- Garden -->
+            <rect fill="#E0FFF7" x="10" y="160" width="130" height="10" rx="2"></rect>
+            <circle fill="#06D6A0" cx="20" cy="165" r="3"></circle>
+            <circle fill="#06D6A0" cx="40" cy="165" r="3"></circle>
+            <circle fill="#06D6A0" cx="60" cy="165" r="3"></circle>
+            <circle fill="#06D6A0" cx="80" cy="165" r="3"></circle>
+            <circle fill="#06D6A0" cx="100" cy="165" r="3"></circle>
+            <circle fill="#06D6A0" cx="120" cy="165" r="3"></circle>
+            <circle fill="#06D6A0" cx="140" cy="165" r="3"></circle>
+        </g>
+        
+        <!-- Info -->
+        <g transform="translate(190, 30)">
+            <text font-family="Arial" font-size="18" font-weight="bold" fill="#212529">
+                <tspan x="0" y="20">Neighborhood Pantry</tspan>
+            </text>
+            
+            <g transform="translate(0, 40)">
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="0">789 Pine Road, Anytown</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="25">Open: Wed, Sat 8AM-12PM</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="50">Phone: (555) 456-7890</tspan>
+                </text>
+                <text font-family="Arial" font-size="14" fill="#495057">
+                    <tspan x="0" y="75">Items Available: 150+</tspan>
+                </text>
+            </g>
+        </g>
+        
+        <!-- Status Badge -->
+        <g transform="translate(320, 30)">
+            <rect fill="#28A745" x="0" y="0" width="60" height="24" rx="12"></rect>
+            <text font-family="Arial" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">
+                <tspan x="30" y="16">OPEN</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

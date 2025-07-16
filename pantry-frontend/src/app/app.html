@@ -27,25 +27,86 @@
       </a>
     </li>
     
+    <!-- Donation Dropdown -->
+    <li class="dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-heart"></i> Donate
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" routerLink="/donate/food">
+          <i class="fas fa-apple-alt"></i> Donate Food
+        </a>
+        <a class="dropdown-item" routerLink="/donate/money">
+          <i class="fas fa-dollar-sign"></i> Donate Money
+        </a>
+      </div>
+    </li>
+
+    <!-- Admin/Management Dropdown (when authenticated) -->
     @if (authService.isAuthenticated()) {
-      <li>
-        <a class="nav-link" routerLink="/preferences" routerLinkActive="active">
-          <i class="fas fa-cog"></i> Preferences
+      <li class="dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-cog"></i> Manage
         </a>
-      </li>
-      <li>
-        <a class="nav-link" routerLink="/analytics" routerLinkActive="active">
-          <i class="fas fa-chart-bar"></i> Analytics
-        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/preferences">
+            <i class="fas fa-user-cog"></i> User Preferences
+          </a>
+          <a class="dropdown-item" routerLink="/analytics">
+            <i class="fas fa-chart-bar"></i> Analytics Dashboard
+          </a>
+          <div class="dropdown-divider"></div>
+          <h6 class="dropdown-header">Admin Tools</h6>
+          <a class="dropdown-item" routerLink="/inventory/1">
+            <i class="fas fa-boxes"></i> Inventory Management
+          </a>
+          <a class="dropdown-item" routerLink="/scanner/1">
+            <i class="fas fa-barcode"></i> Barcode Scanner
+          </a>
+        </div>
       </li>
     }
+
+    <!-- Quick Access Menu -->
+    <li class="dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v"></i> More
+      </a>
+      <div class="dropdown-menu">
+        <h6 class="dropdown-header">Quick Access</h6>
+        <a class="dropdown-item" routerLink="/search">
+          <i class="fas fa-map-marker-alt"></i> Pantry Locator
+        </a>
+        <a class="dropdown-item" routerLink="/donate/food">
+          <i class="fas fa-donate"></i> Quick Donate
+        </a>
+        @if (authService.isAuthenticated()) {
+          <a class="dropdown-item" routerLink="/analytics">
+            <i class="fas fa-chart-line"></i> View Analytics
+          </a>
+        }
+        <div class="dropdown-divider"></div>
+        <h6 class="dropdown-header">Information</h6>
+        <a class="dropdown-item" href="#" (click)="$event.preventDefault(); showAbout()">
+          <i class="fas fa-info-circle"></i> About PantryLink
+        </a>
+        <a class="dropdown-item" href="#" (click)="$event.preventDefault(); showHelp()">
+          <i class="fas fa-question-circle"></i> Help & Support
+        </a>
+      </div>
+    </li>
   </ul>
   
   <div class="animate-slide-left">
     @if (authService.isAuthenticated()) {
-      <button class="btn btn-outline" (click)="logout()">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </button>
+      <div class="user-info">
+        <span class="welcome-text">
+          <i class="fas fa-user"></i> Welcome, {{ getCurrentUser()?.firstName || 'User' }}!
+        </span>
+        <button class="btn btn-outline ml-2" (click)="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
     } @else {
       <a class="btn btn-outline mr-2" routerLink="/login">
         <i class="fas fa-sign-in-alt"></i> Login
@@ -57,9 +118,59 @@
   </div>
 </nav>
 
+<!-- Breadcrumb Navigation -->
+<div class="breadcrumb-container" *ngIf="breadcrumbs.length > 0">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/">
+            <i class="fas fa-home"></i> Home
+          </a>
+        </li>
+        <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs; let last = last" [class.active]="last">
+          <a *ngIf="!last" [routerLink]="breadcrumb.url">
+            <i *ngIf="breadcrumb.icon" [class]="breadcrumb.icon"></i>
+            {{ breadcrumb.label }}
+          </a>
+          <span *ngIf="last">
+            <i *ngIf="breadcrumb.icon" [class]="breadcrumb.icon"></i>
+            {{ breadcrumb.label }}
+          </span>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
 <main class="container py-4">
   <router-outlet></router-outlet>
 </main>
+
+<!-- Floating Action Button -->
+<div class="fab-container">
+  <div class="fab-menu" [class.open]="fabOpen">
+    <button class="fab-main" (click)="toggleFab()">
+      <i class="fas fa-plus" *ngIf="!fabOpen"></i>
+      <i class="fas fa-times" *ngIf="fabOpen"></i>
+    </button>
+    
+    <div class="fab-options">
+      <a class="fab-option" routerLink="/donate/food" (click)="fabOpen = false">
+        <i class="fas fa-apple-alt"></i>
+        <span class="fab-label">Donate Food</span>
+      </a>
+      <a class="fab-option" routerLink="/donate/money" (click)="fabOpen = false">
+        <i class="fas fa-dollar-sign"></i>
+        <span class="fab-label">Donate Money</span>
+      </a>
+      <a class="fab-option" routerLink="/search" (click)="fabOpen = false">
+        <i class="fas fa-search"></i>
+        <span class="fab-label">Find Pantries</span>
+      </a>
+    </div>
+  </div>
+</div>
 
 <footer class="bg-dark text-light p-4 text-center">
   <div class="container">

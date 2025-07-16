@@ -145,6 +145,90 @@ namespace PantryLink.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PantryLink.Core.Entities.DonationItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("FoodDonationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodDonationId");
+
+                    b.ToTable("DonationItems");
+                });
+
+            modelBuilder.Entity("PantryLink.Core.Entities.FoodDonation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DonorEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("DonorName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("DonorPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int>("PantryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PreferredPickupTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PantryId");
+
+                    b.ToTable("FoodDonations");
+                });
+
             modelBuilder.Entity("PantryLink.Core.Entities.InventoryItem", b =>
                 {
                     b.Property<int>("Id")
@@ -217,6 +301,67 @@ namespace PantryLink.Infrastructure.Migrations
                     b.ToTable("InventoryItems");
                 });
 
+            modelBuilder.Entity("PantryLink.Core.Entities.MonetaryDonation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DonorEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("DonorName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("DonorPhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit(1)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int>("PantryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PantryId");
+
+                    b.ToTable("MonetaryDonations");
+                });
+
             modelBuilder.Entity("PantryLink.Core.Entities.Pantry", b =>
                 {
                     b.Property<int>("Id")
@@ -285,7 +430,7 @@ namespace PantryLink.Infrastructure.Migrations
                             Address = "123 Main St, Anytown, ST",
                             AverageRating = 4.5,
                             CloseTime = new TimeSpan(0, 17, 0, 0, 0),
-                            CreatedAt = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(964),
+                            CreatedAt = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(4304),
                             Description = "Serving the community since 1985",
                             Email = "info@communityfoodbank.org",
                             IsActive = true,
@@ -293,7 +438,7 @@ namespace PantryLink.Infrastructure.Migrations
                             OpenTime = new TimeSpan(0, 9, 0, 0, 0),
                             PhoneNumber = "(555) 123-4567",
                             TotalRatings = 42,
-                            UpdatedAt = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(965),
+                            UpdatedAt = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(4304),
                             ZipCode = "12345"
                         },
                         new
@@ -302,7 +447,7 @@ namespace PantryLink.Infrastructure.Migrations
                             Address = "456 Oak Ave, Anytown, ST",
                             AverageRating = 4.2000000000000002,
                             CloseTime = new TimeSpan(0, 16, 0, 0, 0),
-                            CreatedAt = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(981),
+                            CreatedAt = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(4320),
                             Description = "Emergency food assistance",
                             Email = "contact@hopecenter.org",
                             IsActive = true,
@@ -310,7 +455,7 @@ namespace PantryLink.Infrastructure.Migrations
                             OpenTime = new TimeSpan(0, 10, 0, 0, 0),
                             PhoneNumber = "(555) 987-6543",
                             TotalRatings = 28,
-                            UpdatedAt = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(981),
+                            UpdatedAt = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(4320),
                             ZipCode = "12345"
                         });
                 });
@@ -614,7 +759,7 @@ namespace PantryLink.Infrastructure.Migrations
                             EstimatedTravelTimeMinutes = 8,
                             FromZipCode = "12345",
                             IsVerified = true,
-                            LastUpdated = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(2089),
+                            LastUpdated = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(5577),
                             ToZipCode = "12346"
                         },
                         new
@@ -624,7 +769,7 @@ namespace PantryLink.Infrastructure.Migrations
                             EstimatedTravelTimeMinutes = 15,
                             FromZipCode = "12345",
                             IsVerified = true,
-                            LastUpdated = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(2091),
+                            LastUpdated = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(5580),
                             ToZipCode = "12347"
                         },
                         new
@@ -634,7 +779,7 @@ namespace PantryLink.Infrastructure.Migrations
                             EstimatedTravelTimeMinutes = 8,
                             FromZipCode = "12346",
                             IsVerified = true,
-                            LastUpdated = new DateTime(2025, 7, 16, 13, 45, 9, 964, DateTimeKind.Utc).AddTicks(2092),
+                            LastUpdated = new DateTime(2025, 7, 17, 13, 25, 17, 503, DateTimeKind.Utc).AddTicks(5581),
                             ToZipCode = "12345"
                         });
                 });
@@ -690,10 +835,43 @@ namespace PantryLink.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PantryLink.Core.Entities.DonationItem", b =>
+                {
+                    b.HasOne("PantryLink.Core.Entities.FoodDonation", "FoodDonation")
+                        .WithMany("Items")
+                        .HasForeignKey("FoodDonationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FoodDonation");
+                });
+
+            modelBuilder.Entity("PantryLink.Core.Entities.FoodDonation", b =>
+                {
+                    b.HasOne("PantryLink.Core.Entities.Pantry", "Pantry")
+                        .WithMany()
+                        .HasForeignKey("PantryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pantry");
+                });
+
             modelBuilder.Entity("PantryLink.Core.Entities.InventoryItem", b =>
                 {
                     b.HasOne("PantryLink.Core.Entities.Pantry", "Pantry")
                         .WithMany("Inventory")
+                        .HasForeignKey("PantryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pantry");
+                });
+
+            modelBuilder.Entity("PantryLink.Core.Entities.MonetaryDonation", b =>
+                {
+                    b.HasOne("PantryLink.Core.Entities.Pantry", "Pantry")
+                        .WithMany()
                         .HasForeignKey("PantryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -759,6 +937,11 @@ namespace PantryLink.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PantryLink.Core.Entities.FoodDonation", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("PantryLink.Core.Entities.Pantry", b =>

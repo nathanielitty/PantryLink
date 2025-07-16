@@ -17,10 +17,14 @@
               <div class="form-group mb-0">
                 <input 
                   type="text" 
+                  id="zipCodeInput"
                   class="form-control" 
                   [(ngModel)]="zipCode" 
                   placeholder="Enter your ZIP code" 
                   maxlength="5"
+                  autocomplete="postal-code"
+                  pattern="[0-9]{5}"
+                  title="Please enter a 5-digit ZIP code"
                 >
               </div>
               <button 
@@ -36,7 +40,7 @@
       </div>
       <div class="hero-image-wrapper">
         <div class="hero-image-container animate-fade-in delay-500">
-          <img src="assets/hero-image.svg" alt="Food Pantry Illustration" class="hero-image animate-float">
+          <img src="assets/default-pantry.jpg" alt="Food Pantry Illustration" class="hero-image animate-float">
           <div class="hero-blob"></div>
         </div>
       </div>
@@ -50,51 +54,43 @@
 </section>
 
 <!-- Stats Counter Section -->
-<section class="stats-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-3 col-6">
-        <div class="stat-card animate-slide-up">
-          <div class="stat-icon">
-            <i class="fas fa-store"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="counter" data-target="150">0</h3>
-            <p>Pantries</p>
-          </div>
+<section class="stats-section full-width">
+  <div class="stats-container">
+    <div class="stats-grid">
+      <div class="stat-card animate-slide-up">
+        <div class="stat-icon">
+          <i class="fas fa-store"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="counter" data-target="150">0</h3>
+          <p>Pantries</p>
         </div>
       </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card animate-slide-up delay-200">
-          <div class="stat-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="counter" data-target="5280">0</h3>
-            <p>Users</p>
-          </div>
+      <div class="stat-card animate-slide-up delay-200">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="counter" data-target="5280">0</h3>
+          <p>Users</p>
         </div>
       </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card animate-slide-up delay-400">
-          <div class="stat-icon">
-            <i class="fas fa-box-open"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="counter" data-target="25000">0</h3>
-            <p>Items</p>
-          </div>
+      <div class="stat-card animate-slide-up delay-400">
+        <div class="stat-icon">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="counter" data-target="25000">0</h3>
+          <p>Items</p>
         </div>
       </div>
-      <div class="col-md-3 col-6">
-        <div class="stat-card animate-slide-up delay-600">
-          <div class="stat-icon">
-            <i class="fas fa-hands-helping"></i>
-          </div>
-          <div class="stat-content">
-            <h3 class="counter" data-target="12500">0</h3>
-            <p>Families Helped</p>
-          </div>
+      <div class="stat-card animate-slide-up delay-600">
+        <div class="stat-icon">
+          <i class="fas fa-hands-helping"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="counter" data-target="12500">0</h3>
+          <p>Families Helped</p>
         </div>
       </div>
     </div>
@@ -102,56 +98,48 @@
 </section>
 
 <!-- Features Section with Animated Cards -->
-<section class="features-section">
-  <div class="container">
+<section class="features-section full-width">
+  <div class="features-container">
     <h2 class="section-title text-center animate-slide-up">How PantryLink Helps</h2>
-    <div class="row">
-      <div class="col-md-3 col-sm-6">
-        <div class="feature-card animate-slide-up">
-          <div class="feature-icon">
-            <i class="fas fa-map-marker-alt"></i>
-          </div>
-          <h3>ZIP Code Search</h3>
-          <p>Simply enter your ZIP code to find nearby food pantries instantly</p>
+    <div class="features-grid">
+      <div class="feature-card animate-slide-up">
+        <div class="feature-icon">
+          <i class="fas fa-map-marker-alt"></i>
         </div>
+        <h3>ZIP Code Search</h3>
+        <p>Simply enter your ZIP code to find nearby food pantries instantly</p>
       </div>
       
-      <div class="col-md-3 col-sm-6">
-        <div class="feature-card animate-slide-up delay-200">
-          <div class="feature-icon">
-            <i class="fas fa-mobile-alt"></i>
-          </div>
-          <h3>Real-Time Inventory</h3>
-          <p>See what's available right now with barcode scanning updates</p>
+      <div class="feature-card animate-slide-up delay-200">
+        <div class="feature-icon">
+          <i class="fas fa-mobile-alt"></i>
         </div>
+        <h3>Real-Time Inventory</h3>
+        <p>See what's available right now with barcode scanning updates</p>
       </div>
       
-      <div class="col-md-3 col-sm-6">
-        <div class="feature-card animate-slide-up delay-400">
-          <div class="feature-icon">
-            <i class="fas fa-robot"></i>
-          </div>
-          <h3>AI Recommendations</h3>
-          <p>Get personalized suggestions based on your dietary preferences</p>
+      <div class="feature-card animate-slide-up delay-400">
+        <div class="feature-icon">
+          <i class="fas fa-robot"></i>
         </div>
+        <h3>AI Recommendations</h3>
+        <p>Get personalized suggestions based on your dietary preferences</p>
       </div>
       
-      <div class="col-md-3 col-sm-6">
-        <div class="feature-card animate-slide-up delay-600">
-          <div class="feature-icon">
-            <i class="fas fa-bell"></i>
-          </div>
-          <h3>Priority Alerts</h3>
-          <p>Find items expiring soon and high-stock availability first</p>
+      <div class="feature-card animate-slide-up delay-600">
+        <div class="feature-icon">
+          <i class="fas fa-bell"></i>
         </div>
+        <h3>Priority Alerts</h3>
+        <p>Find items expiring soon and high-stock availability first</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- How It Works Section with Timeline -->
-<section class="how-it-works-section">
-  <div class="container">
+<section class="how-it-works-section full-width">
+  <div class="timeline-container">
     <h2 class="section-title text-center animate-slide-up">How It Works</h2>
     <div class="timeline">
       <div class="timeline-item animate-slide-right">
@@ -197,56 +185,9 @@
   </div>
 </section>
 
-<!-- Testimonials Section with Carousel -->
-<section class="testimonials-section">
-  <div class="container">
-    <h2 class="section-title text-center animate-slide-up">What People Say</h2>
-    <div class="testimonials-carousel">
-      <div class="testimonial-item animate-fade-in">
-        <div class="testimonial-content">
-          <p>"PantryLink has been a lifesaver for my family. We can easily find food pantries near us and see what's available before we go."</p>
-        </div>
-        <div class="testimonial-author">
-          <img src="assets/testimonial-1.jpg" alt="Sarah M." class="testimonial-avatar">
-          <div class="testimonial-info">
-            <h4>Sarah M.</h4>
-            <p>Single Mother of 3</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="testimonial-item animate-fade-in delay-200">
-        <div class="testimonial-content">
-          <p>"As a pantry manager, PantryLink has streamlined our inventory management and helped us reach more people in need."</p>
-        </div>
-        <div class="testimonial-author">
-          <img src="assets/testimonial-2.jpg" alt="John D." class="testimonial-avatar">
-          <div class="testimonial-info">
-            <h4>John D.</h4>
-            <p>Food Pantry Manager</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="testimonial-item animate-fade-in delay-400">
-        <div class="testimonial-content">
-          <p>"The AI recommendations feature helps me find food that fits my dietary restrictions. It's made such a difference!"</p>
-        </div>
-        <div class="testimonial-author">
-          <img src="assets/testimonial-3.jpg" alt="Maria L." class="testimonial-avatar">
-          <div class="testimonial-info">
-            <h4>Maria L.</h4>
-            <p>Community Member</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Call to Action Section -->
-<section class="cta-section">
-  <div class="container">
+<section class="cta-section full-width">
+  <div class="cta-container">
     <div class="cta-content text-center">
       <h2 class="animate-slide-up">Get Started Today</h2>
       <p class="animate-slide-up delay-200">Join our community and never miss out on available food assistance</p>

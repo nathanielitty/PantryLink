@@ -19,6 +19,9 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<ZipDistance> ZipDistances { get; set; }
     public DbSet<PantryAnalytics> PantryAnalytics { get; set; }
     public DbSet<SystemAnalytics> SystemAnalytics { get; set; }
+    public DbSet<FoodDonation> FoodDonations { get; set; }
+    public DbSet<DonationItem> DonationItems { get; set; }
+    public DbSet<MonetaryDonation> MonetaryDonations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -207,5 +210,54 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
                 IsVerified = true
             }
         );
+
+        // FoodDonation configuration
+        builder.Entity<FoodDonation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.DonorName).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.DonorEmail).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.DonorPhone).HasMaxLength(20).IsRequired();
+            entity.Property(e => e.Notes).HasMaxLength(1000);
+            entity.Property(e => e.Status).HasMaxLength(50).IsRequired();
+
+            entity.HasOne(e => e.Pantry)
+                  .WithMany()
+                  .HasForeignKey(e => e.PantryId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // DonationItem configuration
+        builder.Entity<DonationItem>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Unit).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Category).HasMaxLength(100);
+
+            entity.HasOne(e => e.FoodDonation)
+                  .WithMany(fd => fd.Items)
+                  .HasForeignKey(e => e.FoodDonationId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // MonetaryDonation configuration
+        builder.Entity<MonetaryDonation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Amount).HasPrecision(18, 2).IsRequired();
+            entity.Property(e => e.DonorName).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.DonorEmail).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.DonorPhone).HasMaxLength(20).IsRequired();
+            entity.Property(e => e.PaymentMethod).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Notes).HasMaxLength(1000);
+            entity.Property(e => e.Status).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.TransactionId).HasMaxLength(100);
+
+            entity.HasOne(e => e.Pantry)
+                  .WithMany()
+                  .HasForeignKey(e => e.PantryId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
